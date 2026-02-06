@@ -124,8 +124,8 @@ a{color:inherit;text-decoration:none}
 
 .gallery-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:1.5rem;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:1.6rem;
 }
 .gallery figure{
   margin:0;
@@ -133,12 +133,88 @@ a{color:inherit;text-decoration:none}
   padding:1rem;
   border-radius:18px;
   box-shadow:0 12px 30px rgba(12,47,51,.12);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.gallery figure:hover{
+  transform:translateY(-3px);
+  box-shadow:0 18px 38px rgba(12,47,51,.16);
+}
+.gallery button{
+  display:block;
+  width:100%;
+  padding:0;
+  border:0;
+  background:none;
+  cursor:pointer;
+  border-radius:14px;
+  overflow:hidden;
+}
+.gallery button img{
+  width:100%;
+  height:clamp(260px, 28vw, 380px);
+  object-fit:cover;
+  border-radius:14px;
 }
 .gallery figcaption{
   margin-top:.8rem;
   color:var(--muted);
   font-size:.95rem;
 }
+
+.lightbox{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(6,20,22,.92);
+  z-index:999;
+  padding:2rem;
+}
+.lightbox.open{display:flex}
+.lightbox-figure{
+  margin:0;
+  max-width:min(92vw, 1500px);
+  width:100%;
+  text-align:center;
+}
+.lightbox-figure img{
+  width:100%;
+  max-height:84vh;
+  object-fit:contain;
+  border-radius:12px;
+}
+.lightbox-figure figcaption{
+  margin-top:.8rem;
+  color:#eef3f3;
+  font-size:.95rem;
+}
+.lightbox-btn{
+  border:0;
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  cursor:pointer;
+}
+.lightbox-btn.close{
+  position:absolute;
+  top:1rem;
+  right:1rem;
+  width:46px;
+  height:46px;
+  border-radius:999px;
+  font-size:1.8rem;
+  line-height:1;
+}
+.lightbox-btn.nav{
+  width:50px;
+  height:80px;
+  border-radius:12px;
+  font-size:1.8rem;
+}
+.lightbox-btn.prev{margin-right:1rem}
+.lightbox-btn.next{margin-left:1rem}
+
+body.lightbox-open{overflow:hidden}
 
 .booking{
   background:linear-gradient(120deg, rgba(244,231,211,.8), rgba(99,183,201,.2));
@@ -177,4 +253,16 @@ a{color:inherit;text-decoration:none}
 @media (max-width:600px){
   .hero{padding:2rem 6vw 3rem}
   .section{padding:3rem 6vw}
+  .gallery-grid{grid-template-columns:1fr}
+  .gallery button img{height:240px}
+  .lightbox{padding:1rem}
+  .lightbox-btn.nav{
+    position:absolute;
+    bottom:1rem;
+    width:52px;
+    height:44px;
+    font-size:1.4rem;
+  }
+  .lightbox-btn.prev{left:1rem;margin:0}
+  .lightbox-btn.next{right:1rem;margin:0}
 }

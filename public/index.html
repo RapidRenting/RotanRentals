@@ -71,34 +71,9 @@
       <div class="container">
         <div class="section-head">
           <h2>Photo highlights</h2>
-          <p>Current photos from the property.</p>
+          <p>All current property photos. Click any image to view full size and browse left or right.</p>
         </div>
-        <div class="gallery-grid">
-          <figure>
-            <img src="assets/media/P1013245-AI.jpeg" alt="Open living area inside the rental home" loading="lazy" decoding="async" />
-            <figcaption>Bright and open living spaces</figcaption>
-          </figure>
-          <figure>
-            <img src="assets/media/P1013315-AI.jpeg" alt="Bedroom view prepared for guests" loading="lazy" decoding="async" />
-            <figcaption>Comfortable guest rooms</figcaption>
-          </figure>
-          <figure>
-            <img src="assets/media/P1013397-AI.jpeg" alt="Outdoor patio and seating area" loading="lazy" decoding="async" />
-            <figcaption>Relaxed outdoor hangout areas</figcaption>
-          </figure>
-          <figure>
-            <img src="assets/media/DJI_0053.jpg" alt="Aerial view of the property and nearby coastline" loading="lazy" decoding="async" />
-            <figcaption>Aerial view of the location</figcaption>
-          </figure>
-          <figure>
-            <img src="assets/media/DJI_0068.jpg" alt="Drone perspective of the neighborhood and water access" loading="lazy" decoding="async" />
-            <figcaption>Nearby coast and neighborhood</figcaption>
-          </figure>
-          <figure>
-            <img src="assets/media/DJI_0103.jpg" alt="Wide drone shot of the island area around the rental" loading="lazy" decoding="async" />
-            <figcaption>Island setting and surroundings</figcaption>
-          </figure>
-        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
       </div>
     </section>
 
@@ -138,6 +113,16 @@
       </div>
     </div>
   </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-btn close" id="lightboxClose" aria-label="Close full-size photo">&times;</button>
+    <button class="lightbox-btn nav prev" id="lightboxPrev" aria-label="Previous photo">&#10094;</button>
+    <figure class="lightbox-figure">
+      <img id="lightboxImage" src="" alt="" />
+      <figcaption id="lightboxCaption"></figcaption>
+    </figure>
+    <button class="lightbox-btn nav next" id="lightboxNext" aria-label="Next photo">&#10095;</button>
+  </div>
 
   <script src="assets/js/main.js"></script>
 </body>
