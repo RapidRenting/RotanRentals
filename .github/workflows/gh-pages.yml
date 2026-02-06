@@ -4,10 +4,14 @@ on:
   push:
     branches: [ main ]
 
-# Explicit permissions required to push to gh-pages
 permissions:
-  contents: write
+  contents: read
   pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
   deploy:
@@ -15,14 +19,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          fetch-depth: 0
-          persist-credentials: true
+          path: ./public
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          publish_branch: gh-pages
-          keep_history: true
+        uses: actions/deploy-pages@v4
