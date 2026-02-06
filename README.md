@@ -3,6 +3,7 @@
 This workspace contains a minimal static website ready for deployment to GitHub Pages via GitHub Actions.
 
 What I added
+
 - `public/index.html` — main site page
 - `public/assets/css/style.css` — simple styles
 - `public/assets/js/main.js` — tiny JS
