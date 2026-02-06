@@ -21,7 +21,6 @@ body{
   line-height:1.6;
 }
 img{max-width:100%;display:block;border-radius:16px}
-video{width:100%;border-radius:18px;display:block}
 a{color:inherit;text-decoration:none}
 
 .hero{
@@ -122,13 +121,6 @@ a{color:inherit;text-decoration:none}
 }
 .feature h3{margin:.2rem 0 .4rem;font-family:"Fraunces",serif}
 .feature p{margin:0;color:var(--muted)}
-
-.media .video-card{
-  background:var(--card);
-  padding:1rem;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-}
 
 .gallery-grid{
   display:grid;
