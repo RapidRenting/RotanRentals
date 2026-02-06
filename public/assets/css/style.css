@@ -78,9 +78,21 @@ a{color:inherit;text-decoration:none}
 }
 .hero-card{
   background:var(--card);
-  padding:1rem;
+  padding:0;
   border-radius:var(--radius);
   box-shadow:var(--shadow);
+  overflow:hidden;
+  aspect-ratio:16/10;
+}
+.hero-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:0;
+  transition:opacity .35s ease;
+}
+.hero-card img.is-fading{
+  opacity:.55;
 }
 
 .btn{

@@ -41,6 +41,7 @@ const photos = [
 ];
 
 const galleryGrid = document.getElementById("galleryGrid");
+const heroImage = document.getElementById("heroImage");
 const lightbox = document.getElementById("lightbox");
 const lightboxImage = document.getElementById("lightboxImage");
 const lightboxCaption = document.getElementById("lightboxCaption");
@@ -48,6 +49,12 @@ const closeBtn = document.getElementById("lightboxClose");
 const prevBtn = document.getElementById("lightboxPrev");
 const nextBtn = document.getElementById("lightboxNext");
 let currentIndex = 0;
+let heroIndex = photos.indexOf("P1013260-AI.jpeg");
+let heroTimer = null;
+
+if (heroIndex < 0) {
+  heroIndex = 0;
+}
 
 function labelFor(photoName, index) {
   return "Photo " + (index + 1) + " of " + photos.length;
@@ -67,6 +74,35 @@ function renderGallery() {
     );
   }).join("");
   galleryGrid.innerHTML = markup;
+}
+
+function heroAltFor(index) {
+  return "Featured property photo " + (index + 1) + " of " + photos.length;
+}
+
+function setHeroPhoto(index) {
+  if (!heroImage) {
+    return;
+  }
+  heroIndex = (index + photos.length) % photos.length;
+  heroImage.src = "assets/media/" + photos[heroIndex];
+  heroImage.alt = heroAltFor(heroIndex);
+}
+
+function startHeroCycle() {
+  if (!heroImage) {
+    return;
+  }
+  if (heroTimer) {
+    clearInterval(heroTimer);
+  }
+  heroTimer = setInterval(function () {
+    heroImage.classList.add("is-fading");
+    window.setTimeout(function () {
+      setHeroPhoto(heroIndex + 1);
+      heroImage.classList.remove("is-fading");
+    }, 160);
+  }, 4000);
 }
 
 function showPhoto(index) {
@@ -92,6 +128,9 @@ function closeLightbox() {
   document.body.classList.remove("lightbox-open");
   lightboxImage.src = "";
 }
+
+setHeroPhoto(heroIndex);
+startHeroCycle();
 
 renderGallery();
 
