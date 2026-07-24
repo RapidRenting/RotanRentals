@@ -179,6 +179,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.04em; te
 .gallery-heading { display: flex; max-width: 1440px; margin: 0 auto 1.25rem; align-items: end; justify-content: space-between; gap: 2rem; }
 .gallery-heading h2 { margin: 0; font-size: clamp(2.4rem, 4vw, 4.5rem); line-height: .95; }
 .gallery-filters { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .4rem; }
+.gallery-filter-mobile { display: none; }
 .filter-button {
   padding: .5rem .78rem;
   border: 1px solid var(--line);
@@ -434,16 +435,26 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.04em; te
   .gallery-view { padding: 1.25rem 1rem 1rem; }
   .gallery-heading { display: block; }
   .gallery-heading h2 { margin-bottom: 1rem; }
-  .gallery-filters { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; padding-bottom: .35rem; }
-  .gallery-filters, .thumbnail-rail { scrollbar-width: none; }
-  .gallery-filters::-webkit-scrollbar, .thumbnail-rail::-webkit-scrollbar { display: none; }
-  .filter-button { flex: 0 0 auto; }
+  .gallery-filters { display: none; }
+  .gallery-filter-mobile { display: grid; gap: .35rem; margin-bottom: 1rem; }
+  .gallery-filter-mobile label { color: var(--muted); font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .gallery-filter-mobile select {
+    width: 100%;
+    min-height: 3rem;
+    padding: .7rem 2.7rem .7rem .9rem;
+    border: 1px solid var(--line);
+    border-radius: .8rem;
+    background: var(--white);
+    color: var(--teal);
+    font: 700 .82rem var(--sans);
+  }
+  .thumbnail-rail { scrollbar-width: none; }
+  .thumbnail-rail::-webkit-scrollbar { display: none; }
   .gallery-stage { height: 53vh; min-height: 22rem; }
   .stage-arrow { width: 2.7rem; height: 2.7rem; }
   .stage-caption { right: .8rem; bottom: .75rem; left: .8rem; }
   .stage-caption strong { font-size: .95rem; }
   .expand-button { top: .75rem; right: .75rem; }
-  .thumbnail-heading span { display: none; }
   .explore-view, .book-view { padding: 2rem 1rem; }
   .explore-intro h2, .book-intro h2 { font-size: clamp(3rem, 14vw, 4.8rem); }
   .video-showcase { grid-template-columns: 1fr; }

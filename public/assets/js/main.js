@@ -51,6 +51,8 @@ const galleryCategory = document.getElementById("galleryCategory");
 const galleryCount = document.getElementById("galleryCount");
 const thumbnailRail = document.getElementById("thumbnailRail");
 const filterButtons = Array.from(document.querySelectorAll(".filter-button"));
+const filterSelect = document.getElementById("galleryFilterSelect");
+const galleryResultCount = document.getElementById("galleryResultCount");
 const galleryStage = document.getElementById("galleryStage");
 const lightbox = document.getElementById("lightbox");
 const lightboxImage = document.getElementById("lightboxImage");
@@ -63,6 +65,8 @@ let activeFilter = "all";
 let filteredIndexes = photos.map(function (_, index) { return index; });
 let lastFocusedElement = null;
 let pointerStartX = null;
+let pointerStartY = null;
+let pointerId = null;
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -114,14 +118,14 @@ window.addEventListener("popstate", function () {
 });
 
 function renderThumbnails() {
-  thumbnailRail.innerHTML = filteredIndexes.map(function (photoIndex) {
+  thumbnailRail.innerHTML = filteredIndexes.map(function (photoIndex, filteredPosition) {
     const photo = photos[photoIndex];
     return [
       '<button class="thumb', photoIndex === currentIndex ? " is-active" : "",
       '" type="button" data-index="', photoIndex,
-      '" aria-label="Show photo: ', photo.label, '">',
+      '" aria-label="Show photo ', filteredPosition + 1, " of ", filteredIndexes.length, ": ", photo.label, '">',
       '<img src="', thumbPath(photo.file), '" alt="" loading="lazy" decoding="async" />',
-      '<span>', String(photoIndex + 1).padStart(2, "0"), "</span></button>"
+      '<span>', String(filteredPosition + 1).padStart(2, "0"), "</span></button>"
     ].join("");
   }).join("");
 }
@@ -135,9 +139,13 @@ function updateGallery(index, moveThumbnail) {
   galleryImage.alt = photo.label;
   galleryCategory.textContent = photo.categoryLabel;
   galleryCaption.textContent = photo.label;
-  galleryCount.textContent = String(currentIndex + 1).padStart(2, "0") + " / " + photos.length;
+  const filteredPosition = filteredIndexes.indexOf(currentIndex);
+  galleryCount.textContent = String(filteredPosition + 1).padStart(2, "0") + " / " + String(filteredIndexes.length).padStart(2, "0");
   Array.from(thumbnailRail.querySelectorAll(".thumb")).forEach(function (thumb) {
-    thumb.classList.toggle("is-active", Number(thumb.dataset.index) === currentIndex);
+    const active = Number(thumb.dataset.index) === currentIndex;
+    thumb.classList.toggle("is-active", active);
+    if (active) thumb.setAttribute("aria-current", "true");
+    else thumb.removeAttribute("aria-current");
   });
   if (moveThumbnail) {
     const activeThumb = thumbnailRail.querySelector('[data-index="' + currentIndex + '"]');
@@ -153,6 +161,7 @@ function moveGallery(direction) {
 }
 
 function applyFilter(filter) {
+  if (!filterButtons.some(function (button) { return button.dataset.filter === filter; })) filter = "all";
   activeFilter = filter;
   filteredIndexes = photos.map(function (photo, index) {
     return filter === "all" || photo.category === filter ? index : -1;
@@ -162,6 +171,8 @@ function applyFilter(filter) {
     button.classList.toggle("is-active", active);
     button.setAttribute("aria-pressed", String(active));
   });
+  filterSelect.value = filter;
+  galleryResultCount.textContent = filteredIndexes.length + (filteredIndexes.length === 1 ? " photo" : " photos");
   currentIndex = filteredIndexes[0];
   renderThumbnails();
   updateGallery(currentIndex, false);
@@ -171,6 +182,10 @@ filterButtons.forEach(function (button) {
   button.addEventListener("click", function () {
     applyFilter(button.dataset.filter);
   });
+});
+
+filterSelect.addEventListener("change", function () {
+  applyFilter(filterSelect.value);
 });
 
 thumbnailRail.addEventListener("click", function (event) {
@@ -187,7 +202,8 @@ function updateLightbox() {
   lightboxImage.src = originalPath(photo.file);
   lightboxImage.alt = photo.label;
   lightboxCaption.textContent = photo.label;
-  lightboxCount.textContent = String(currentIndex + 1).padStart(2, "0") + " / " + photos.length;
+  const filteredPosition = filteredIndexes.indexOf(currentIndex);
+  lightboxCount.textContent = String(filteredPosition + 1).padStart(2, "0") + " / " + String(filteredIndexes.length).padStart(2, "0");
 }
 
 function openLightbox() {
@@ -217,13 +233,24 @@ lightbox.addEventListener("click", function (event) {
 });
 
 galleryStage.addEventListener("pointerdown", function (event) {
+  if (!event.isPrimary) return;
   pointerStartX = event.clientX;
+  pointerStartY = event.clientY;
+  pointerId = event.pointerId;
 });
 galleryStage.addEventListener("pointerup", function (event) {
-  if (pointerStartX === null) return;
-  const distance = event.clientX - pointerStartX;
-  if (Math.abs(distance) > 55) moveGallery(distance > 0 ? -1 : 1);
+  if (pointerStartX === null || event.pointerId !== pointerId) return;
+  const distanceX = event.clientX - pointerStartX;
+  const distanceY = event.clientY - pointerStartY;
+  if (Math.abs(distanceX) > 55 && Math.abs(distanceX) > Math.abs(distanceY)) moveGallery(distanceX > 0 ? -1 : 1);
   pointerStartX = null;
+  pointerStartY = null;
+  pointerId = null;
+});
+galleryStage.addEventListener("pointercancel", function () {
+  pointerStartX = null;
+  pointerStartY = null;
+  pointerId = null;
 });
 
 document.addEventListener("keydown", function (event) {
