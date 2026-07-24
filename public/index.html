@@ -3,229 +3,191 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Roatán Rental | Private Pool & Island Living</title>
-  <meta name="description" content="Explore a private Roatán home with a pool, open-air living spaces, full kitchen, photo gallery, island videos, and live booking availability." />
-  <meta name="theme-color" content="#123f42" />
+  <title>Pristine Bay Roatán Villa | Private Pool Rental</title>
+  <meta name="description" content="Explore a private villa in Pristine Bay, Roatán, with its own pool, open-air living, an immersive photo gallery, island videos, and live booking availability." />
+  <meta name="theme-color" content="#0b3437" />
   <link rel="canonical" href="https://rapidrenting.github.io/RotanRentals/" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://rapidrenting.github.io/RotanRentals/" />
-  <meta property="og:title" content="Roatán Rental | Private Pool & Island Living" />
-  <meta property="og:description" content="Private pool. Open-air living. Island pace. Explore the home and check live availability." />
-  <meta property="og:image" content="https://rapidrenting.github.io/RotanRentals/assets/media/og-roatan-rental.png" />
+  <meta property="og:title" content="Pristine Bay Roatán Villa" />
+  <meta property="og:description" content="Private pool. Open-air living. Pristine Bay, Roatán." />
+  <meta property="og:image" content="https://rapidrenting.github.io/RotanRentals/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Roatán Rental | Private Pool & Island Living" />
-  <meta name="twitter:description" content="Private pool. Open-air living. Island pace. Explore the home and check live availability." />
-  <meta name="twitter:image" content="https://rapidrenting.github.io/RotanRentals/assets/media/og-roatan-rental.png" />
+  <meta name="twitter:title" content="Pristine Bay Roatán Villa" />
+  <meta name="twitter:description" content="Private pool. Open-air living. Pristine Bay, Roatán." />
+  <meta name="twitter:image" content="https://rapidrenting.github.io/RotanRentals/og.png" />
   <link rel="icon" type="image/png" href="assets/media/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=20260724" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260724e" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
 
-  <header class="site-header">
-    <nav class="nav container" aria-label="Primary navigation">
-      <a class="brand" href="#top" aria-label="Roatán Rental home">
+  <header class="app-header">
+    <nav class="nav-shell" aria-label="Primary navigation">
+      <button class="brand route-button" type="button" data-route="home" aria-label="Pristine Bay Villa home">
         <span class="brand-mark" aria-hidden="true">R</span>
-        <span>Roatán Rental</span>
-      </a>
+        <span><strong>Roatán Villa</strong><small>Pristine Bay</small></span>
+      </button>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
-        <span></span><span></span>
-        <span class="sr-only">Open navigation</span>
+        <span></span><span></span><span class="sr-only">Open navigation</span>
       </button>
       <div class="nav-links" id="navLinks">
-        <a href="#home">The home</a>
-        <a href="#gallery">Gallery</a>
-        <a href="#island">Island life</a>
-        <a class="btn btn-small btn-primary" href="#book">Check availability</a>
+        <button class="nav-button route-button is-active" type="button" data-route="home" aria-current="page">Overview</button>
+        <button class="nav-button route-button" type="button" data-route="gallery">Gallery</button>
+        <button class="nav-button route-button" type="button" data-route="explore">Pristine Bay</button>
+        <button class="btn btn-book route-button" type="button" data-route="book">Availability</button>
       </div>
     </nav>
   </header>
 
   <main id="main">
-    <section class="hero" id="top">
-      <div class="hero-media" aria-hidden="true">
-        <img src="assets/media/DJI_0068.jpg" alt="" fetchpriority="high" decoding="async" />
+    <section class="view home-view is-active" id="homeView" data-view="home">
+      <div class="home-photo">
+        <picture>
+          <source srcset="assets/media/enhanced/DJI_0103.webp" type="image/webp" />
+          <img src="assets/media/DJI_0103.jpg" alt="Aerial view of the Pristine Bay villa, private pool, and terraces" fetchpriority="high" decoding="async" />
+        </picture>
+        <div class="home-photo-shade"></div>
+        <div class="photo-credit">The villa and private pool</div>
       </div>
-      <div class="hero-shade"></div>
-      <div class="container hero-inner">
-        <div class="hero-copy">
-          <p class="eyebrow light">Roatán, Honduras</p>
-          <h1>Your island home,<br />at a slower pace.</h1>
-          <p class="hero-lead">A private home with its own pool, generous outdoor spaces, and the easy rhythm of island living.</p>
-          <div class="hero-actions">
-            <a class="btn btn-coral" href="#book">See live availability</a>
-            <a class="text-link light-link" href="#gallery">Explore the home <span aria-hidden="true">→</span></a>
+      <div class="home-content">
+        <div class="home-copy">
+          <p class="eyebrow">Pristine Bay · Roatán, Honduras</p>
+          <h1>Your private place in <em>Pristine Bay.</em></h1>
+          <p class="home-lead">A relaxed island villa with its own pool, open-air terraces, generous living spaces, and the Caribbean just beyond the hillside.</p>
+          <div class="home-actions">
+            <button class="btn btn-primary route-button" type="button" data-route="gallery">Explore 37 photos</button>
+            <button class="btn btn-quiet route-button" type="button" data-route="book">Check availability</button>
           </div>
         </div>
-        <div class="hero-note">
-          <span class="note-line"></span>
-          <p>Browse here. Book securely with the local property manager.</p>
+        <div class="property-facts" aria-label="Property highlights">
+          <div><span>01</span><strong>Private pool</strong><small>Sun terrace and loungers</small></div>
+          <div><span>02</span><strong>Indoor–outdoor living</strong><small>Covered patios and balconies</small></div>
+          <div><span>03</span><strong>Pristine Bay setting</strong><small>Golf course and Caribbean views</small></div>
         </div>
       </div>
     </section>
 
-    <section class="quick-facts" aria-label="Property highlights">
-      <div class="container facts-grid">
-        <div class="fact">
-          <span class="fact-number">01</span>
-          <div><strong>Private pool</strong><span>Sunny terrace and loungers</span></div>
+    <section class="view gallery-view" id="galleryView" data-view="gallery" hidden>
+      <div class="gallery-heading">
+        <div>
+          <p class="eyebrow">The visual tour</p>
+          <h2>Explore the villa.</h2>
         </div>
-        <div class="fact">
-          <span class="fact-number">02</span>
-          <div><strong>Open-air living</strong><span>Patio, balcony, and dining</span></div>
-        </div>
-        <div class="fact">
-          <span class="fact-number">03</span>
-          <div><strong>Room to settle in</strong><span>Full kitchen and relaxed interiors</span></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section home-section" id="home">
-      <div class="container editorial-grid">
-        <div class="editorial-copy reveal">
-          <p class="eyebrow">The home</p>
-          <h2>Comfortable by design. Unhurried by nature.</h2>
-          <p class="section-lead">Start the day outside, cool off in the pool, then gather around the kitchen or shaded terrace. The home is set up for the kind of days that do not need an itinerary.</p>
-          <a class="text-link" href="#gallery">View the full gallery <span aria-hidden="true">→</span></a>
-        </div>
-        <figure class="editorial-photo photo-main reveal">
-          <img src="assets/media/P1013260-AI.jpeg" alt="Shaded outdoor lounge overlooking the private pool" loading="lazy" decoding="async" />
-        </figure>
-        <figure class="editorial-photo photo-small reveal">
-          <img src="assets/media/P1013397-AI.jpeg" alt="Bright open-plan living room and dining area" loading="lazy" decoding="async" />
-          <figcaption>Indoor comfort, outdoor rhythm.</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <section class="section gallery-section" id="gallery">
-      <div class="container">
-        <div class="section-heading reveal">
-          <div>
-            <p class="eyebrow">Take a closer look</p>
-            <h2>The home, from every angle.</h2>
-          </div>
-          <p>Exterior, pool, living spaces, bedrooms, and the surrounding island landscape.</p>
-        </div>
-        <div class="gallery-grid" id="galleryGrid" aria-live="polite"></div>
-        <div class="gallery-more">
-          <button class="btn btn-outline" id="showAllPhotos" type="button">View all 37 photos</button>
+        <div class="gallery-filters" id="galleryFilters" aria-label="Filter photos">
+          <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-button" type="button" data-filter="outdoor" aria-pressed="false">Outdoor &amp; pool</button>
+          <button class="filter-button" type="button" data-filter="living" aria-pressed="false">Living &amp; kitchen</button>
+          <button class="filter-button" type="button" data-filter="bedroom" aria-pressed="false">Bedrooms</button>
+          <button class="filter-button" type="button" data-filter="bathroom" aria-pressed="false">Bathrooms</button>
+          <button class="filter-button" type="button" data-filter="location" aria-pressed="false">Pristine Bay</button>
         </div>
       </div>
-    </section>
 
-    <section class="section island-section" id="island">
-      <div class="container">
-        <div class="section-heading light reveal">
-          <div>
-            <p class="eyebrow light">Beyond the front door</p>
-            <h2>A little taste of island life.</h2>
-          </div>
-          <p>Two short glimpses of the scenery, activities, and arrival experience that make Roatán memorable.</p>
-        </div>
-        <div class="video-grid">
-          <article class="video-card reveal">
-            <div class="video-frame">
-              <video controls playsinline preload="metadata" poster="assets/media/roatan-island-life-poster.jpg">
-                <source src="assets/media/roatan-island-life.mp4" type="video/mp4" />
-                Your browser does not support embedded video.
-              </video>
-            </div>
-            <div class="video-copy">
-              <span>00:30</span>
-              <h3>Dive into Roatán</h3>
-              <p>Coastline, turquoise water, and the island’s adventurous side.</p>
-            </div>
-          </article>
-          <article class="video-card reveal">
-            <div class="video-frame">
-              <video controls playsinline preload="metadata" poster="assets/media/roatan-getting-here-poster.jpg">
-                <source src="assets/media/roatan-getting-here.mp4" type="video/mp4" />
-                Your browser does not support embedded video.
-              </video>
-            </div>
-            <div class="video-copy">
-              <span>00:33</span>
-              <h3>Arrive, then explore</h3>
-              <p>A quick look at getting here and the experiences waiting nearby.</p>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section booking-section" id="book">
-      <div class="container">
-        <div class="booking-intro reveal">
-          <p class="eyebrow">Plan your stay</p>
-          <h2>See what dates are open.</h2>
-          <p>Availability and reservations are handled by the local property manager. Browse the live calendar here, then continue securely on their booking platform for rates, policies, and confirmation.</p>
-        </div>
-        <div class="booking-shell reveal">
-          <div class="booking-toolbar">
+      <div class="gallery-workspace">
+        <div class="gallery-stage" id="galleryStage">
+          <picture id="galleryPicture">
+            <source id="gallerySource" srcset="assets/media/enhanced/DJI_0103.webp" type="image/webp" />
+            <img id="galleryImage" src="assets/media/DJI_0103.jpg" alt="Aerial view of the Pristine Bay villa, private pool, and terraces" />
+          </picture>
+          <div class="gallery-stage-shade"></div>
+          <button class="stage-arrow stage-prev" id="galleryPrev" type="button" aria-label="Previous photo">&#10094;</button>
+          <button class="stage-arrow stage-next" id="galleryNext" type="button" aria-label="Next photo">&#10095;</button>
+          <button class="expand-button" id="galleryExpand" type="button">View full screen <span aria-hidden="true">↗</span></button>
+          <div class="stage-caption">
             <div>
-              <span class="status-dot" aria-hidden="true"></span>
-              <strong>Live availability</strong>
+              <span id="galleryCategory">Aerial exterior</span>
+              <strong id="galleryCaption">Villa, private pool, and terraces from above</strong>
             </div>
-            <a href="https://www.lodgix.com/booking-calendar/websites/23844/properties/82207/?iframe=LodgixCalendarSingle0&amp;v=9" target="_blank" rel="noopener noreferrer">Open in a new window <span aria-hidden="true">↗</span></a>
+            <span id="galleryCount">01 / 37</span>
           </div>
-          <div class="calendar-frame" id="bookingCalendar">
-            <div class="calendar-loading" id="calendarLoading">Loading the live calendar…</div>
-            <iframe
-              title="Live availability calendar"
-              src="https://www.lodgix.com/booking-calendar/websites/23844/properties/82207/?iframe=LodgixCalendarSingle0&amp;v=9"
-              loading="lazy"
-              referrerpolicy="strict-origin-when-cross-origin"
-            ></iframe>
+        </div>
+        <div class="thumbnail-panel">
+          <div class="thumbnail-heading">
+            <strong>Photo collection</strong>
+            <span>Use ← → keys or select a thumbnail</span>
           </div>
-          <div class="booking-foot">
-            <p>This site introduces the home; availability, rates, and final reservations remain with the property manager.</p>
-            <a class="btn btn-primary" href="https://www.lodgix.com/booking-calendar/websites/23844/properties/82207/?iframe=LodgixCalendarSingle0&amp;v=9" target="_blank" rel="noopener noreferrer">Continue to booking</a>
+          <div class="thumbnail-rail" id="thumbnailRail" aria-label="Property photo thumbnails"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view explore-view" id="exploreView" data-view="explore" hidden>
+      <div class="explore-intro">
+        <p class="eyebrow light">The setting</p>
+        <h2>Pristine Bay,<br />island pace.</h2>
+        <p>The villa sits within Pristine Bay, surrounded by rolling green fairways and tropical hillside views. These short films offer a glimpse of arriving on the island and getting out on the water.</p>
+      </div>
+      <div class="video-showcase">
+        <article class="video-card">
+          <div class="video-frame">
+            <video controls playsinline preload="metadata" poster="assets/media/roatan-island-life-poster.jpg">
+              <source src="assets/media/roatan-island-life.mp4" type="video/mp4" />
+              Your browser does not support embedded video.
+            </video>
           </div>
+          <div><span>00:30</span><button class="video-fullscreen" type="button" data-video="0">Full screen</button><strong>Dive into Roatán</strong><p>Coastline, turquoise water, and the island’s adventurous side.</p></div>
+        </article>
+        <article class="video-card">
+          <div class="video-frame">
+            <video controls playsinline preload="metadata" poster="assets/media/roatan-getting-here-poster.jpg">
+              <source src="assets/media/roatan-getting-here.mp4" type="video/mp4" />
+              Your browser does not support embedded video.
+            </video>
+          </div>
+          <div><span>00:33</span><button class="video-fullscreen" type="button" data-video="1">Full screen</button><strong>Arrive, then explore</strong><p>A quick look at getting here and the experiences waiting nearby.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="view book-view" id="bookView" data-view="book" hidden>
+      <aside class="book-intro">
+        <p class="eyebrow">Plan your stay</p>
+        <h2>Live availability, without leaving the villa.</h2>
+        <p>Browse open dates here. Rates, policies, and final reservations are securely completed with the local property manager.</p>
+        <a class="text-link" href="https://www.lodgix.com/booking-calendar/websites/23844/properties/82207/?iframe=LodgixCalendarSingle0&amp;v=9" target="_blank" rel="noopener noreferrer">Open manager’s booking page <span aria-hidden="true">↗</span></a>
+      </aside>
+      <div class="booking-shell">
+        <div class="booking-toolbar">
+          <div><span class="status-dot" aria-hidden="true"></span><strong>Live availability</strong></div>
+          <span>Pristine Bay · Roatán</span>
+        </div>
+        <div class="calendar-frame" id="bookingCalendar">
+          <div class="calendar-loading">Loading the live calendar…</div>
+          <iframe
+            title="Live availability calendar"
+            src="https://www.lodgix.com/booking-calendar/websites/23844/properties/82207/?iframe=LodgixCalendarSingle0&amp;v=9"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+          ></iframe>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-top">
-      <div>
-        <p class="eyebrow light">Roatán, Honduras</p>
-        <h2>Ready when you are.</h2>
-      </div>
-      <a class="btn btn-coral" href="#book">Check availability</a>
-    </div>
-    <div class="container footer-bottom">
-      <a class="brand footer-brand" href="#top">
-        <span class="brand-mark" aria-hidden="true">R</span>
-        <span>Roatán Rental</span>
-      </a>
-      <p>Property photos shown throughout. Booking is completed with the local property manager.</p>
-      <small>&copy; <span id="year"></span> Roatán Rental</small>
-    </div>
+  <footer class="app-footer">
+    <span>Pristine Bay · Roatán, Honduras</span>
+    <small>&copy; <span id="year"></span> Roatán Villa · Booking managed locally</small>
   </footer>
 
-  <a class="mobile-book" href="#book">Check availability</a>
-
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Property photo viewer" aria-hidden="true">
-    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close photo viewer">&times;</button>
-    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" type="button" aria-label="Previous photo">&#10094;</button>
-    <figure class="lightbox-figure">
-      <img id="lightboxImage" src="" alt="" />
-      <figcaption>
-        <span id="lightboxCaption"></span>
-        <span id="lightboxCount"></span>
-      </figcaption>
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Full-screen property gallery" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close full-screen gallery">&times;</button>
+    <button class="lightbox-arrow lightbox-prev" id="lightboxPrev" type="button" aria-label="Previous photo">&#10094;</button>
+    <figure>
+      <picture>
+        <source id="lightboxSource" srcset="" type="image/webp" />
+        <img id="lightboxImage" src="" alt="" />
+      </picture>
+      <figcaption><strong id="lightboxCaption"></strong><span id="lightboxCount"></span></figcaption>
     </figure>
-    <button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="Next photo">&#10095;</button>
+    <button class="lightbox-arrow lightbox-next" id="lightboxNext" type="button" aria-label="Next photo">&#10095;</button>
   </div>
 
-  <script src="assets/js/main.js?v=20260724"></script>
+  <script src="assets/js/main.js?v=20260724e"></script>
 </body>
 </html>
