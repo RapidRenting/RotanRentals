@@ -815,7 +815,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 .booking-note a { color: var(--teal-700); font-size: .74rem; font-weight: 700; text-decoration: underline; text-underline-offset: .2rem; }
 .booking-note a:hover { color: var(--coral-600); }
 .booking-shell {
-  width: min(100%, 54rem);
+  width: min(100%, 34rem);
   align-self: center;
   justify-self: center;
   overflow: hidden;
@@ -840,14 +840,22 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 }
 .booking-toolbar-actions button:hover, .booking-toolbar-actions a:hover { border-color: var(--aqua-500); background: var(--aqua-100); color: var(--teal-700); }
 .status-dot { width: .55rem; height: .55rem; flex: 0 0 auto; border-radius: 50%; background: #34966a; animation: livePulse 2.6s var(--ease) infinite; }
-/* The booking calendar is a cross-origin iframe, so the only way to show a whole
-   month without an inner scrollbar is to scale the frame's own viewport. `zoom`
-   re-runs layout inside the iframe (so the dates stay crisp) and percentages
-   resolve in the zoomed space, meaning 100% still fills the frame exactly.
-   fitBookingCalendar() in main.js sets both custom properties; the fallbacks keep
-   the original sizing if it never runs. */
-.calendar-frame { position: relative; height: var(--cal-frame-h, clamp(30rem, 65vh, 42rem)); }
-.calendar-frame iframe { position: relative; z-index: 2; width: 100%; height: 100%; border: 0; background: var(--white); zoom: var(--cal-zoom, 1); }
+/* The cross-origin calendar is rendered on a stable 500px canvas and scaled from
+   the top centre only when the panel is narrower. A standard transform behaves
+   consistently in Edge, Safari, and Chromium without collapsing the iframe box. */
+.calendar-frame { position: relative; height: var(--cal-frame-h, 52.5rem); overflow: hidden; }
+.calendar-frame iframe {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 50%;
+  width: 31.25rem;
+  height: 52.5rem;
+  border: 0;
+  background: var(--white);
+  transform: translateX(-50%) scale(var(--cal-scale, 1));
+  transform-origin: top center;
+}
 .calendar-loading { position: absolute; z-index: 1; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: .88rem; }
 .calendar-frame.is-loaded .calendar-loading { display: none; }
 
