@@ -179,7 +179,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.04em; te
 .home-copy h1 em { color: var(--teal-2); font-weight: inherit; }
 .home-lead { max-width: 35rem; color: var(--muted); font-size: clamp(1rem, 1.3vw, 1.15rem); }
 .home-actions { display: flex; gap: .75rem; margin-top: 1.8rem; }
-.property-facts { display: grid; grid-template-columns: repeat(3, 1fr); padding-top: 1.5rem; border-top: 1px solid var(--line); }
+.property-facts { display: grid; grid-template-columns: repeat(4, 1fr); padding-top: 1.5rem; border-top: 1px solid var(--line); }
 .property-facts > div { min-width: 0; padding-right: 1.1rem; }
 .property-facts > div + div { padding-left: 1.1rem; border-left: 1px solid var(--line); }
 .property-facts span, .property-facts strong, .property-facts small { display: block; }
@@ -320,6 +320,38 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.04em; te
 .video-card p { margin: .35rem 0 0; color: rgba(255,255,255,.6); font-size: .75rem; }
 .video-frame video:fullscreen,
 .video-frame video:-webkit-full-screen { width: 100vw; height: 100vh; object-fit: contain !important; background: #000; }
+.location-card {
+  display: grid;
+  min-width: 0;
+  overflow: hidden;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1.2fr) minmax(20rem, .8fr);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 1.2rem;
+  background: rgba(255,255,255,.07);
+}
+.location-map { min-height: 29rem; background: #d9e3dc; }
+.location-map iframe { display: block; width: 100%; height: 100%; min-height: 29rem; border: 0; }
+.location-copy { align-self: center; padding: clamp(1.5rem, 3vw, 3rem); }
+.location-copy h3 { margin: 0 0 .8rem; font-family: var(--serif); font-size: clamp(2.2rem, 3.5vw, 4rem); font-weight: 500; line-height: .95; }
+.location-copy > p:not(.eyebrow) { color: rgba(255,255,255,.7); }
+.location-copy > small { display: block; margin-top: 1rem; color: rgba(255,255,255,.5); font-size: .64rem; line-height: 1.45; }
+.amenity-links { display: grid; gap: .55rem; margin-top: 1.25rem; }
+.amenity-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .85rem .95rem;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: .75rem;
+  background: rgba(255,255,255,.06);
+  color: var(--white);
+  text-decoration: none;
+}
+.amenity-links a:hover { border-color: rgba(255,255,255,.35); background: rgba(255,255,255,.1); }
+.amenity-links strong { font-size: .76rem; }
+.amenity-links span { color: #9bd5d1; font-size: .64rem; text-align: right; }
 
 .book-view {
   display: grid;
@@ -418,6 +450,8 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.04em; te
   .explore-view, .book-view { grid-template-columns: 1fr; }
   .explore-intro, .book-intro { max-width: 48rem; }
   .video-frame { height: min(48vh, 520px); }
+  .location-card { grid-template-columns: 1fr; }
+  .location-map, .location-map iframe { min-height: 26rem; }
 }
 
 @media (max-width: 700px) {
@@ -457,9 +491,11 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.04em; te
   .home-content { min-height: auto; padding: 2rem 1rem 1.5rem; }
   .home-copy h1 { font-size: clamp(3.2rem, 15vw, 5rem); }
   .home-actions { align-items: stretch; flex-direction: column; }
-  .property-facts { grid-template-columns: repeat(3, 1fr); margin-top: 2rem; }
-  .property-facts > div { padding: 0 .5rem; }
-  .property-facts > div + div { padding-left: .5rem; border-top: 0; border-left: 1px solid var(--line); }
+  .property-facts { grid-template-columns: repeat(2, 1fr); margin-top: 2rem; }
+  .property-facts > div { padding: .75rem .6rem; }
+  .property-facts > div + div { padding-left: .6rem; border-top: 0; border-left: 1px solid var(--line); }
+  .property-facts > div:nth-child(3) { border-top: 1px solid var(--line); border-left: 0; }
+  .property-facts > div:nth-child(4) { border-top: 1px solid var(--line); }
   .property-facts strong { font-size: .78rem; }
   .gallery-view { padding: 1.25rem 1rem 1rem; }
   .gallery-heading { display: block; }
@@ -492,6 +528,10 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.04em; te
   .booking-toolbar { align-items: flex-start; flex-direction: column; gap: .25rem; }
   .video-showcase { grid-template-columns: 1fr; }
   .video-frame { height: 65vh; max-height: 560px; }
+  .location-map, .location-map iframe { min-height: 23rem; }
+  .location-copy { padding: 1.5rem 1rem; }
+  .amenity-links a { align-items: flex-start; flex-direction: column; gap: .2rem; }
+  .amenity-links span { text-align: left; }
   .calendar-frame { height: min(78svh, 44rem); }
   .app-footer { align-items: flex-start; flex-direction: column; gap: .15rem; }
   .lightbox { padding: 4.5rem .75rem 5rem; }
