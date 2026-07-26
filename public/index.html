@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>1111 Pearl Court | Pristine Bay Roatán Villa</title>
-  <meta name="description" content="Explore 1111 Pearl Court in Pristine Bay, Roatán: two upstairs king suites, a flexible main-level sleeping area, private infinity pool, terraces, and live availability." />
+  <meta name="description" content="Explore 1111 Pearl Court in Pristine Bay, Roatán: two upstairs king suites, 2½ bathrooms, private infinity pool, terraces, and live availability." />
   <meta name="theme-color" content="#0b3437" />
   <link rel="canonical" href="https://rapidrenting.github.io/RotanRentals/" />
   <meta property="og:type" content="website" />
@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=20260726a" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260726b" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -60,7 +60,7 @@
         <div class="home-copy">
           <p class="eyebrow">1111 Pearl Court · Pristine Bay · Roatán</p>
           <h1>Your private place in <em>Pristine Bay.</em></h1>
-          <p class="home-lead">Two upstairs king suites with private terraces and ensuite bathrooms, a flexible main-level sleeping area, open-plan living, and your own infinity pool.</p>
+          <p class="home-lead">Two upstairs king suites with private balconies and ensuite bathrooms, open-plan main-level living, and your own infinity pool.</p>
           <div class="home-actions">
             <button class="btn btn-primary route-button" type="button" data-route="gallery">Explore 57 photos</button>
             <button class="btn btn-quiet route-button" type="button" data-route="book">Check availability</button>
@@ -70,7 +70,25 @@
           <div><span>01</span><strong>Private infinity pool</strong><small>Sun terrace and covered patios</small></div>
           <div><span>02</span><strong>Two king suites</strong><small>Private terraces and ensuites</small></div>
           <div><span>03</span><strong>2½ bathrooms</strong><small>Two full ensuites plus powder room</small></div>
-          <div><span>04</span><strong>Flexible sleeping area</strong><small>Partitionable main-level space</small></div>
+          <div><span>04</span><strong>Sleeps four</strong><small>Two private king bedrooms</small></div>
+        </div>
+      </div>
+      <div class="villa-details" aria-labelledby="villaDetailsTitle">
+        <div class="villa-details-intro">
+          <p class="eyebrow">Inside the villa</p>
+          <h2 id="villaDetailsTitle">Private suites.<br />Easy island living.</h2>
+          <p>The manager-confirmed layout pairs two complete upstairs suites with an airy main level that opens to the pool and patios.</p>
+          <button class="text-link route-button" type="button" data-route="book">See live availability <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="villa-detail-grid">
+          <article><span>Upstairs</span><h3>Two king suites</h3><p>Each bedroom has its own full bathroom, walk-in closet, and furnished balcony.</p></article>
+          <article><span>Main level</span><h3>Open and connected</h3><p>Living, dining, and a fully equipped kitchen flow to patios through wide sliding doors.</p></article>
+          <article><span>Outdoors</span><h3>Private pool &amp; patios</h3><p>Swim, dine, and lounge outside with tropical views and space reserved for your group.</p></article>
+          <article><span>Everyday comfort</span><h3>Settle in easily</h3><p>Split air conditioning, ceiling fans, Wi-Fi, laundry, dishwasher, microwave, and televisions.</p></article>
+        </div>
+        <div class="villa-detail-strip" aria-label="Villa capacity and layout">
+          <span><strong>2</strong> bedrooms</span><span><strong>2½</strong> bathrooms</span><span><strong>4</strong> guests</span><span><strong>3</strong> night minimum*</span>
+          <small>*Confirm current minimum stay and terms when booking.</small>
         </div>
       </div>
     </section>
@@ -111,7 +129,7 @@
           <div class="gallery-stage-shade"></div>
           <button class="stage-arrow stage-prev" id="galleryPrev" type="button" aria-label="Previous photo">&#10094;</button>
           <button class="stage-arrow stage-next" id="galleryNext" type="button" aria-label="Next photo">&#10095;</button>
-          <button class="expand-button" id="galleryExpand" type="button">View full screen <span aria-hidden="true">↗</span></button>
+          <button class="expand-button" id="galleryExpand" type="button">Open &amp; zoom <span aria-hidden="true">↗</span></button>
           <div class="stage-caption">
             <div>
               <span id="galleryCategory">Aerial exterior</span>
@@ -134,7 +152,7 @@
       <div class="explore-intro">
         <p class="eyebrow light">The setting</p>
         <h2>Pristine Bay,<br />island pace.</h2>
-        <p>1111 Pearl Court sits within Pristine Bay, surrounded by rolling golf fairways, tropical hills, and the Caribbean shoreline. These short films offer a glimpse of arriving on the island and getting out on the water.</p>
+        <p>1111 Pearl Court sits within a gated coastal community built around the Black Pearl 18-hole golf course. These short films offer a glimpse of arriving on Roatán and getting out on the water.</p>
       </div>
       <div class="video-showcase">
         <article class="video-card">
@@ -157,22 +175,17 @@
         </article>
       </div>
       <article class="location-card">
-        <div class="location-map">
-          <iframe
-            title="Map of 1111 Pearl Court in Pristine Bay, Roatán"
-            src="https://www.google.com/maps?q=1111+Pearl+Court,+Pristine+Bay,+Roatan,+Honduras&amp;z=15&amp;output=embed"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
+        <div class="location-map" id="pristineBayMap" role="region" aria-label="Interactive map of the villa and nearby Pristine Bay amenities">
+          <p class="map-fallback"><a href="https://www.google.com/maps/search/?api=1&amp;query=1111+Pearl+Court+Pristine+Bay+Roatan" target="_blank" rel="noopener noreferrer">Open 1111 Pearl Court in Google Maps ↗</a></p>
         </div>
         <div class="location-copy">
           <p class="eyebrow light">On the map</p>
-          <h3>1111 Pearl Court</h3>
-          <p>A Pristine Bay address near the Black Pearl Golf Course, Beach Club, sports courts, and Caribbean shoreline.</p>
+          <h3>Three places,<br />one easy view.</h3>
+          <p>Hover, focus, or tap a location to match it with its marker. Open any card for directions in Google Maps.</p>
           <div class="amenity-links" aria-label="Nearby Pristine Bay amenities">
-            <a href="https://www.google.com/maps/search/?api=1&amp;query=1111+Pearl+Court+Pristine+Bay+Roatan" target="_blank" rel="noopener noreferrer"><strong>Villa location</strong><span>Open in Google Maps ↗</span></a>
-            <a href="https://www.google.com/maps/search/?api=1&amp;query=Black+Pearl+Golf+Course+Pristine+Bay+Roatan" target="_blank" rel="noopener noreferrer"><strong>Black Pearl Golf Course</strong><span>Fairways within Pristine Bay ↗</span></a>
-            <a href="https://www.google.com/maps/search/?api=1&amp;query=Pristine+Bay+Beach+Club+Roatan" target="_blank" rel="noopener noreferrer"><strong>Beach Club &amp; shoreline</strong><span>Pools, beach, and water access ↗</span></a>
+            <a class="map-location-link" data-map-location="villa" href="https://www.google.com/maps/search/?api=1&amp;query=1111+Pearl+Court+Pristine+Bay+Roatan" target="_blank" rel="noopener noreferrer"><b>1</b><span><strong>1111 Pearl Court</strong><small>Your villa and private pool</small></span><em>Directions ↗</em></a>
+            <a class="map-location-link" data-map-location="golf" href="https://www.google.com/maps/search/?api=1&amp;query=Black+Pearl+Golf+Course+Pristine+Bay+Roatan" target="_blank" rel="noopener noreferrer"><b>2</b><span><strong>Black Pearl Golf Course</strong><small>18 holes through Pristine Bay</small></span><em>Directions ↗</em></a>
+            <a class="map-location-link" data-map-location="beach" href="https://www.google.com/maps/search/?api=1&amp;query=Pristine+Bay+Beach+Club+Roatan" target="_blank" rel="noopener noreferrer"><b>3</b><span><strong>Beach Club &amp; shoreline</strong><small>Pools, beach, and Caribbean water</small></span><em>Directions ↗</em></a>
           </div>
           <small>Amenity access, hours, and fees may vary. Confirm current arrangements with the property manager.</small>
         </div>
@@ -185,11 +198,19 @@
         <h2>Check availability.</h2>
         <p>Select your dates below. Rates, policies, and final reservations are securely completed by the local property manager.</p>
         <a class="booking-cta" href="https://www.lodgix.com/23844/?rental_property=82207" target="_blank" rel="noopener noreferrer">Open full booking page <span aria-hidden="true">↗</span></a>
+        <div class="booking-note">
+          <strong>Before you book</strong>
+          <p>The manager currently notes a three-night minimum, separately metered electricity, taxes, and property-specific fees. Confirm the final terms shown during booking.</p>
+          <a href="https://www.roatanpropertymanagement.com/pristine-bay-townhouse/" target="_blank" rel="noopener noreferrer">Review manager details ↗</a>
+        </div>
       </aside>
       <div class="booking-shell">
         <div class="booking-toolbar">
           <div><span class="status-dot" aria-hidden="true"></span><strong>Live availability</strong></div>
-          <span>Pristine Bay · Roatán</span>
+          <div class="booking-toolbar-actions">
+            <button id="bookingReset" type="button">Return to calendar</button>
+            <a href="https://www.lodgix.com/23844/?rental_property=82207" target="_blank" rel="noopener noreferrer">Open separately ↗</a>
+          </div>
         </div>
         <div class="calendar-frame" id="bookingCalendar">
           <div class="calendar-loading">Loading the live calendar…</div>
@@ -213,15 +234,24 @@
     <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close full-screen gallery">&times;</button>
     <button class="lightbox-arrow lightbox-prev" id="lightboxPrev" type="button" aria-label="Previous photo">&#10094;</button>
     <figure>
-      <picture>
-        <source id="lightboxSource" srcset="" type="image/webp" />
-        <img id="lightboxImage" src="" alt="" />
-      </picture>
+      <div class="lightbox-media" id="lightboxMedia">
+        <picture id="lightboxPicture">
+          <source id="lightboxSource" srcset="" type="image/webp" />
+          <img id="lightboxImage" src="" alt="" draggable="false" />
+        </picture>
+      </div>
       <figcaption><strong id="lightboxCaption"></strong><span id="lightboxCount"></span></figcaption>
     </figure>
     <button class="lightbox-arrow lightbox-next" id="lightboxNext" type="button" aria-label="Next photo">&#10095;</button>
+    <div class="lightbox-tools" aria-label="Photo zoom controls">
+      <button id="lightboxZoomOut" type="button" aria-label="Zoom out">−</button>
+      <button id="lightboxZoomReset" type="button" aria-label="Reset zoom"><span id="lightboxZoomLabel">100%</span></button>
+      <button id="lightboxZoomIn" type="button" aria-label="Zoom in">+</button>
+      <small>Pinch, scroll, or double-tap to zoom</small>
+    </div>
   </div>
 
-  <script src="assets/js/main.js?v=20260726a"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="assets/js/main.js?v=20260726b"></script>
 </body>
 </html>

@@ -14,7 +14,7 @@ const photos = [
   { file: "covered-pool-patio.jpg", category: "outdoor", categoryLabel: "Covered patio", label: "Covered patio with lounge and dining seating" },
   { file: "main-living-wide.jpg", category: "living", categoryLabel: "Living room", label: "Bright main-level living room with pool access" },
   { file: "living-pool-doors.jpg", category: "living", categoryLabel: "Living room", label: "Living room opening directly to the pool terrace" },
-  { file: "main-level-flex-nook.jpg", category: "living", categoryLabel: "Flexible main-level area", label: "Desk nook within the flexible main-level living area" },
+  { file: "main-level-flex-nook.jpg", category: "living", categoryLabel: "Main-level work nook", label: "Desk nook within the open-plan main level" },
   { file: "dining-open-plan.jpg", category: "living", categoryLabel: "Dining area", label: "Dining area connected to the living room and kitchen" },
   { file: "entry-staircase.jpg", category: "living", categoryLabel: "Entry hall", label: "Main entry and staircase to the two king suites" },
   { file: "dining-garden.jpg", category: "living", categoryLabel: "Dining area", label: "Dining area with garden doors and tropical light" },
@@ -80,6 +80,9 @@ const lightboxSource = document.getElementById("lightboxSource");
 const lightboxCaption = document.getElementById("lightboxCaption");
 const lightboxCount = document.getElementById("lightboxCount");
 const lightboxClose = document.getElementById("lightboxClose");
+const lightboxMedia = document.getElementById("lightboxMedia");
+const lightboxPicture = document.getElementById("lightboxPicture");
+const lightboxZoomLabel = document.getElementById("lightboxZoomLabel");
 let currentIndex = 0;
 let activeFilter = "all";
 let filteredIndexes = photos.map(function (_, index) { return index; });
@@ -87,6 +90,21 @@ let lastFocusedElement = null;
 let pointerStartX = null;
 let pointerStartY = null;
 let pointerId = null;
+let lightboxScale = 1;
+let lightboxTranslateX = 0;
+let lightboxTranslateY = 0;
+let lightboxDragStart = null;
+let lightboxPinchStart = null;
+let lightboxHadPinch = false;
+let lastLightboxTap = 0;
+const lightboxPointers = new Map();
+let pristineBayMap = null;
+const pristineBayMarkers = {};
+const pristineBayLocations = [
+  { id: "villa", number: 1, label: "1111 Pearl Court", detail: "Villa and private pool", coordinates: [16.373745, -86.464218] },
+  { id: "golf", number: 2, label: "Black Pearl Golf Course", detail: "18-hole course", coordinates: [16.3723, -86.458] },
+  { id: "beach", number: 3, label: "Pristine Bay Beach Club", detail: "Pools and Caribbean shoreline", coordinates: [16.37545, -86.46532] }
+];
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -100,6 +118,76 @@ function originalPath(file) {
 
 function thumbPath(file) {
   return "assets/media/thumbs/" + file.replace(/\.(jpe?g)$/i, ".webp");
+}
+
+function setActiveMapLocation(locationId, moveMap) {
+  document.querySelectorAll(".map-location-link").forEach(function (link) {
+    link.classList.toggle("is-active", link.dataset.mapLocation === locationId);
+  });
+  pristineBayLocations.forEach(function (location) {
+    const marker = pristineBayMarkers[location.id];
+    if (!marker) return;
+    const markerElement = marker.getElement();
+    if (markerElement) markerElement.classList.toggle("is-active", location.id === locationId);
+    marker.setZIndexOffset(location.id === locationId ? 1000 : 0);
+  });
+  if (moveMap && pristineBayMap) {
+    const location = pristineBayLocations.find(function (item) { return item.id === locationId; });
+    if (location) pristineBayMap.panTo(location.coordinates, { animate: true, duration: .35 });
+  }
+}
+
+function initializePristineBayMap() {
+  const mapElement = document.getElementById("pristineBayMap");
+  if (!mapElement || !window.L) return;
+  if (pristineBayMap) {
+    pristineBayMap.invalidateSize();
+    return;
+  }
+
+  mapElement.innerHTML = "";
+  pristineBayMap = window.L.map(mapElement, {
+    scrollWheelZoom: false,
+    tap: true
+  });
+  window.L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    subdomains: "abcd",
+    maxZoom: 20,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  }).addTo(pristineBayMap);
+
+  pristineBayLocations.forEach(function (location) {
+    const icon = window.L.divIcon({
+      className: "map-pin",
+      html: '<span class="map-pin-shape"><b>' + location.number + "</b></span>",
+      iconSize: [40, 40],
+      iconAnchor: [20, 20],
+      popupAnchor: [0, -22]
+    });
+    const marker = window.L.marker(location.coordinates, {
+      icon: icon,
+      keyboard: true,
+      title: location.label
+    }).addTo(pristineBayMap);
+    marker.bindPopup("<strong>" + location.label + "</strong><br>" + location.detail);
+    marker.on("mouseover", function () { setActiveMapLocation(location.id, false); });
+    marker.on("mouseout", function () { setActiveMapLocation(null, false); });
+    marker.on("click", function () {
+      setActiveMapLocation(location.id, true);
+      marker.openPopup();
+    });
+    pristineBayMarkers[location.id] = marker;
+  });
+
+  const bounds = window.L.latLngBounds(pristineBayLocations.map(function (location) { return location.coordinates; }));
+  pristineBayMap.fitBounds(bounds, { padding: [28, 28], maxZoom: 15 });
+
+  document.querySelectorAll(".map-location-link").forEach(function (link) {
+    link.addEventListener("mouseenter", function () { setActiveMapLocation(link.dataset.mapLocation, true); });
+    link.addEventListener("mouseleave", function () { setActiveMapLocation(null, false); });
+    link.addEventListener("focus", function () { setActiveMapLocation(link.dataset.mapLocation, true); });
+    link.addEventListener("blur", function () { setActiveMapLocation(null, false); });
+  });
 }
 
 function setRoute(route, updateHistory) {
@@ -120,6 +208,12 @@ function setRoute(route, updateHistory) {
   if (updateHistory) history.pushState({ route: safeRoute }, "", "#" + safeRoute);
   window.scrollTo({ top: 0, behavior: "instant" });
   if (safeRoute === "gallery") updateGallery(currentIndex, false);
+  if (safeRoute === "explore") {
+    window.setTimeout(function () {
+      initializePristineBayMap();
+      if (pristineBayMap) pristineBayMap.invalidateSize();
+    }, 0);
+  }
 }
 
 routeButtons.forEach(function (button) {
@@ -217,6 +311,7 @@ document.getElementById("galleryPrev").addEventListener("click", function () { m
 document.getElementById("galleryNext").addEventListener("click", function () { moveGallery(1); });
 
 function updateLightbox() {
+  resetLightboxZoom(false);
   const photo = photos[currentIndex];
   lightboxSource.srcset = webpPath(photo.file);
   lightboxImage.src = originalPath(photo.file);
@@ -226,12 +321,54 @@ function updateLightbox() {
   lightboxCount.textContent = String(filteredPosition + 1).padStart(2, "0") + " / " + String(filteredIndexes.length).padStart(2, "0");
 }
 
+function applyLightboxTransform(animate) {
+  if (lightboxScale <= 1) {
+    lightboxScale = 1;
+    lightboxTranslateX = 0;
+    lightboxTranslateY = 0;
+  } else {
+    const maxX = lightboxMedia.clientWidth * (lightboxScale - 1) / 2;
+    const maxY = lightboxMedia.clientHeight * (lightboxScale - 1) / 2;
+    lightboxTranslateX = Math.max(-maxX, Math.min(maxX, lightboxTranslateX));
+    lightboxTranslateY = Math.max(-maxY, Math.min(maxY, lightboxTranslateY));
+  }
+  lightboxPicture.style.transition = animate ? "transform .18s ease" : "none";
+  lightboxPicture.style.transform = "translate3d(" + lightboxTranslateX + "px," + lightboxTranslateY + "px,0) scale(" + lightboxScale + ")";
+  lightboxZoomLabel.textContent = Math.round(lightboxScale * 100) + "%";
+  lightboxMedia.classList.toggle("is-zoomed", lightboxScale > 1);
+}
+
+function setLightboxZoom(nextScale, animate) {
+  lightboxScale = Math.max(1, Math.min(4, nextScale));
+  if (lightboxScale < 1.02) lightboxScale = 1;
+  applyLightboxTransform(animate);
+}
+
+function resetLightboxZoom(animate) {
+  lightboxPointers.clear();
+  lightboxDragStart = null;
+  lightboxPinchStart = null;
+  lightboxHadPinch = false;
+  lightboxTranslateX = 0;
+  lightboxTranslateY = 0;
+  lightboxScale = 1;
+  lightboxMedia.classList.remove("is-dragging");
+  applyLightboxTransform(animate);
+}
+
+function pointerDistance(pointerValues) {
+  const first = pointerValues[0];
+  const second = pointerValues[1];
+  return Math.hypot(second.x - first.x, second.y - first.y);
+}
+
 function openLightbox() {
   lastFocusedElement = document.activeElement;
   updateLightbox();
   lightbox.classList.add("open");
   lightbox.setAttribute("aria-hidden", "false");
   document.body.classList.add("lightbox-open");
+  resetLightboxZoom(false);
   lightboxClose.focus();
 }
 
@@ -239,6 +376,7 @@ function closeLightbox() {
   lightbox.classList.remove("open");
   lightbox.setAttribute("aria-hidden", "true");
   document.body.classList.remove("lightbox-open");
+  resetLightboxZoom(false);
   lightboxImage.src = "";
   lightboxSource.srcset = "";
   if (lastFocusedElement) lastFocusedElement.focus();
@@ -248,9 +386,98 @@ document.getElementById("galleryExpand").addEventListener("click", openLightbox)
 lightboxClose.addEventListener("click", closeLightbox);
 document.getElementById("lightboxPrev").addEventListener("click", function () { moveGallery(-1); });
 document.getElementById("lightboxNext").addEventListener("click", function () { moveGallery(1); });
+document.getElementById("lightboxZoomIn").addEventListener("click", function () { setLightboxZoom(lightboxScale + .5, true); });
+document.getElementById("lightboxZoomOut").addEventListener("click", function () { setLightboxZoom(lightboxScale - .5, true); });
+document.getElementById("lightboxZoomReset").addEventListener("click", function () { resetLightboxZoom(true); });
 lightbox.addEventListener("click", function (event) {
   if (event.target === lightbox) closeLightbox();
 });
+lightboxMedia.addEventListener("wheel", function (event) {
+  event.preventDefault();
+  setLightboxZoom(lightboxScale + (event.deltaY < 0 ? .35 : -.35), false);
+}, { passive: false });
+lightboxMedia.addEventListener("dblclick", function () {
+  if (lightboxScale > 1) resetLightboxZoom(true);
+  else setLightboxZoom(2, true);
+});
+lightboxMedia.addEventListener("pointerdown", function (event) {
+  event.preventDefault();
+  lightboxMedia.setPointerCapture(event.pointerId);
+  lightboxPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+  if (lightboxPointers.size === 1) {
+    lightboxDragStart = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      translateX: lightboxTranslateX,
+      translateY: lightboxTranslateY,
+      time: Date.now(),
+      pointerType: event.pointerType
+    };
+    if (lightboxScale > 1) lightboxMedia.classList.add("is-dragging");
+  } else if (lightboxPointers.size === 2) {
+    lightboxHadPinch = true;
+    lightboxPinchStart = {
+      distance: pointerDistance(Array.from(lightboxPointers.values())),
+      scale: lightboxScale
+    };
+  }
+});
+lightboxMedia.addEventListener("pointermove", function (event) {
+  if (!lightboxPointers.has(event.pointerId)) return;
+  lightboxPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+  if (lightboxPointers.size === 2 && lightboxPinchStart) {
+    const distance = pointerDistance(Array.from(lightboxPointers.values()));
+    setLightboxZoom(lightboxPinchStart.scale * distance / lightboxPinchStart.distance, false);
+  } else if (lightboxPointers.size === 1 && lightboxScale > 1 && lightboxDragStart) {
+    lightboxTranslateX = lightboxDragStart.translateX + event.clientX - lightboxDragStart.x;
+    lightboxTranslateY = lightboxDragStart.translateY + event.clientY - lightboxDragStart.y;
+    applyLightboxTransform(false);
+  }
+});
+function finishLightboxPointer(event) {
+  if (!lightboxPointers.has(event.pointerId)) return;
+  const dragStart = lightboxDragStart;
+  lightboxPointers.delete(event.pointerId);
+  if (lightboxPointers.size === 1) {
+    const remaining = Array.from(lightboxPointers.entries())[0];
+    lightboxDragStart = {
+      pointerId: remaining[0],
+      x: remaining[1].x,
+      y: remaining[1].y,
+      translateX: lightboxTranslateX,
+      translateY: lightboxTranslateY,
+      time: Date.now(),
+      pointerType: event.pointerType
+    };
+  }
+  if (lightboxPointers.size > 0) return;
+
+  lightboxMedia.classList.remove("is-dragging");
+  lightboxPinchStart = null;
+  if (dragStart && !lightboxHadPinch) {
+    const distanceX = event.clientX - dragStart.x;
+    const distanceY = event.clientY - dragStart.y;
+    const isTap = Math.abs(distanceX) < 10 && Math.abs(distanceY) < 10 && Date.now() - dragStart.time < 320;
+    if (lightboxScale === 1 && Math.abs(distanceX) > 55 && Math.abs(distanceX) > Math.abs(distanceY)) {
+      moveGallery(distanceX > 0 ? -1 : 1);
+    } else if (isTap && dragStart.pointerType === "touch") {
+      const now = Date.now();
+      if (now - lastLightboxTap < 320) {
+        if (lightboxScale > 1) resetLightboxZoom(true);
+        else setLightboxZoom(2, true);
+        lastLightboxTap = 0;
+      } else {
+        lastLightboxTap = now;
+      }
+    }
+  }
+  lightboxHadPinch = false;
+  lightboxDragStart = null;
+  applyLightboxTransform(true);
+}
+lightboxMedia.addEventListener("pointerup", finishLightboxPointer);
+lightboxMedia.addEventListener("pointercancel", finishLightboxPointer);
 
 galleryStage.addEventListener("pointerdown", function (event) {
   if (!event.isPrimary) return;
@@ -286,8 +513,21 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-document.querySelector("#bookingCalendar iframe").addEventListener("load", function () {
+const bookingUrl = "https://www.lodgix.com/23844/?rental_property=82207";
+const bookingIframe = document.querySelector("#bookingCalendar iframe");
+bookingIframe.addEventListener("load", function () {
   document.getElementById("bookingCalendar").classList.add("is-loaded");
+});
+document.getElementById("bookingReset").addEventListener("click", function () {
+  const resetButton = this;
+  document.getElementById("bookingCalendar").classList.remove("is-loaded");
+  bookingIframe.src = bookingUrl;
+  resetButton.textContent = "Calendar restored";
+  window.setTimeout(function () { resetButton.textContent = "Return to calendar"; }, 1800);
+});
+
+window.addEventListener("resize", function () {
+  if (pristineBayMap) pristineBayMap.invalidateSize();
 });
 
 document.querySelectorAll(".video-fullscreen").forEach(function (button) {
