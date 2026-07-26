@@ -190,6 +190,40 @@ function initializePristineBayMap() {
   });
 }
 
+/* Lodgix serves the availability calendar cross-origin, so its own layout cannot be
+   restyled. Scaling the iframe's viewport is the only way to show a full month
+   without an inner scrollbar: CALENDAR_WIDTH is the narrowest internal width that
+   still renders all seven day columns, and CALENDAR_HEIGHT clears a six-row grid. */
+const CALENDAR_WIDTH = 500;
+const CALENDAR_HEIGHT = 840;
+const MIN_CALENDAR_SCALE = 0.5;
+
+function fitBookingCalendar() {
+  const frame = document.getElementById("bookingCalendar");
+  const frameWidth = frame.clientWidth;
+  if (!frameWidth) return;
+
+  // Never magnify past 1:1; below that, scale down only as far as the frame width
+  // demands, then again if the calendar would not fit the screen under the header.
+  // The two-column layout centres the panel in the viewport, so its padding counts
+  // against the budget; stacked layouts scroll to the calendar anyway.
+  let scale = Math.min(frameWidth / CALENDAR_WIDTH, 1);
+  const viewStyles = window.getComputedStyle(document.querySelector(".book-view"));
+  const reserved = window.innerWidth > 1000
+    ? parseFloat(viewStyles.paddingTop) + parseFloat(viewStyles.paddingBottom)
+    : 0;
+  const heightBudget = window.innerHeight
+    - document.querySelector(".app-header").offsetHeight
+    - document.querySelector(".booking-toolbar").offsetHeight
+    - reserved
+    - 16;
+  if (heightBudget > 0) scale = Math.min(scale, heightBudget / CALENDAR_HEIGHT);
+  scale = Math.max(scale, MIN_CALENDAR_SCALE);
+
+  frame.style.setProperty("--cal-zoom", String(scale));
+  frame.style.setProperty("--cal-frame-h", Math.round(CALENDAR_HEIGHT * scale) + "px");
+}
+
 function setRoute(route, updateHistory) {
   const safeRoute = routeNames.includes(route) ? route : "home";
   views.forEach(function (view) {
@@ -208,6 +242,7 @@ function setRoute(route, updateHistory) {
   if (updateHistory) history.pushState({ route: safeRoute }, "", "#" + safeRoute);
   window.scrollTo({ top: 0, behavior: "instant" });
   if (safeRoute === "gallery") updateGallery(currentIndex, false);
+  if (safeRoute === "book") fitBookingCalendar();
   if (safeRoute === "explore") {
     window.setTimeout(function () {
       initializePristineBayMap();
@@ -528,6 +563,7 @@ document.getElementById("bookingReset").addEventListener("click", function () {
 
 window.addEventListener("resize", function () {
   if (pristineBayMap) pristineBayMap.invalidateSize();
+  fitBookingCalendar();
 });
 
 document.querySelectorAll(".video-fullscreen").forEach(function (button) {
