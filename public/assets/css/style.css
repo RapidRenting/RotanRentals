@@ -327,18 +327,8 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
   padding: clamp(3rem, 6vw, 6rem) clamp(2rem, 5vw, 5.5rem);
 }
 .home-copy { max-width: 38rem; }
-.home-copy h1 { margin-bottom: 1.4rem; font-size: clamp(3.4rem, 5.8vw, 6.5rem); line-height: .91; }
-.home-copy h1 span { display: block; color: var(--teal-600); font: inherit; }
-@supports (background-clip: text) or (-webkit-background-clip: text) {
-  .home-copy h1 span {
-    /* Two deep stops only — a warm third stop washes out whichever word wraps last. */
-    background: linear-gradient(100deg, var(--aqua-600), var(--teal-800));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-  }
-}
+.home-copy h1 { margin-bottom: 1.4rem; font-size: clamp(3.4rem, 4.7vw, 5.4rem); line-height: .94; }
+.home-copy h1 .title-line { display: block; color: inherit; font: inherit; white-space: nowrap; }
 .home-lead { max-width: 35rem; color: var(--muted); font-size: clamp(1.02rem, 1.3vw, 1.18rem); }
 .home-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
 .property-facts {
@@ -1041,7 +1031,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
   .home-photo { aspect-ratio: 4 / 3; }
   .photo-credit { display: none; }
   .home-content { gap: 2rem; margin-top: -1.75rem; padding: 2.25rem 1.15rem 2rem; }
-  .home-copy h1 { font-size: clamp(3rem, 14vw, 5rem); }
+  .home-copy h1 { font-size: clamp(2.15rem, 10.4vw, 3.2rem); letter-spacing: -.045em; line-height: .98; }
   .home-actions { align-items: stretch; flex-direction: column; margin-top: 1.6rem; }
   .property-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
   .property-facts > div { padding: .9rem .85rem .95rem; }
