@@ -328,9 +328,9 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 }
 .home-copy { max-width: 38rem; }
 .home-copy h1 { margin-bottom: 1.4rem; font-size: clamp(3.4rem, 5.8vw, 6.5rem); line-height: .91; }
-.home-copy h1 em { color: var(--teal-600); font-weight: inherit; }
+.home-copy h1 span { display: block; color: var(--teal-600); font: inherit; }
 @supports (background-clip: text) or (-webkit-background-clip: text) {
-  .home-copy h1 em {
+  .home-copy h1 span {
     /* Two deep stops only — a warm third stop washes out whichever word wraps last. */
     background: linear-gradient(100deg, var(--aqua-600), var(--teal-800));
     -webkit-background-clip: text;
