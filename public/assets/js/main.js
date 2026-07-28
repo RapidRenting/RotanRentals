@@ -58,7 +58,7 @@ const photos = [
   { file: "black-pearl-fairway-hills.jpg", category: "location", categoryLabel: "Black Pearl Golf Course", label: "Rolling fairways and green hills of Pristine Bay" }
 ];
 
-const routeNames = ["home", "gallery", "explore", "book"];
+const routeNames = ["home", "gallery", "activities", "explore", "book"];
 const views = Array.from(document.querySelectorAll("[data-view]"));
 const routeButtons = Array.from(document.querySelectorAll(".route-button"));
 const navButtons = Array.from(document.querySelectorAll(".nav-button"));
@@ -103,7 +103,20 @@ const pristineBayMarkers = {};
 const pristineBayLocations = [
   { id: "villa", number: 1, label: "1111 Pearl Court", detail: "Villa and private pool", coordinates: [16.373745, -86.464218] },
   { id: "golf", number: 2, label: "Black Pearl Golf Course", detail: "18-hole course", coordinates: [16.3723, -86.458] },
-  { id: "beach", number: 3, label: "Pristine Bay Beach Club", detail: "Pools and Caribbean shoreline", coordinates: [16.37545, -86.46532] }
+  { id: "beach", number: 3, label: "Pristine Bay Beach Club", detail: "Pools and Caribbean shoreline", coordinates: [16.37545, -86.46532] },
+  { id: "scuba", number: 4, label: "Pristine Bay Scuba Shop", detail: "Dive experiences and equipment", coordinates: [16.3761, -86.4639] }
+];
+let activitiesMap = null;
+const activityMarkers = {};
+const activityLocations = [
+  { id: "golf", number: 1, label: "Black Pearl Golf Course", detail: "Golf", coordinates: [16.3723, -86.458] },
+  { id: "scuba", number: 2, label: "Pristine Bay Scuba Shop", detail: "Diving", coordinates: [16.3761, -86.4639] },
+  { id: "beachclub", number: 3, label: "Pristine Bay Beach Club", detail: "Beach club", coordinates: [16.37545, -86.46532] },
+  { id: "westbay", number: 4, label: "West Bay Beach", detail: "Beach", coordinates: [16.2734, -86.5991] },
+  { id: "westend", number: 5, label: "West End Dining", detail: "Dining", coordinates: [16.3054, -86.5936] },
+  { id: "brewery", number: 6, label: "Roatán Island Brewing Company", detail: "Brewery", coordinates: [16.3517, -86.5238] },
+  { id: "carambola", number: 7, label: "Carambola Botanical Gardens", detail: "Attraction", coordinates: [16.3371, -86.5682] },
+  { id: "iguana", number: 8, label: "Arch’s Iguana & Marine Park", detail: "Family stop", coordinates: [16.3554, -86.4408] }
 ];
 
 document.getElementById("year").textContent = new Date().getFullYear();
@@ -190,6 +203,62 @@ function initializePristineBayMap() {
   });
 }
 
+function setActiveActivityLocation(locationId, moveMap) {
+  document.querySelectorAll(".activity-map-link").forEach(function (link) {
+    link.classList.toggle("is-active", link.dataset.activityLocation === locationId);
+  });
+  activityLocations.forEach(function (location) {
+    const marker = activityMarkers[location.id];
+    if (!marker) return;
+    const markerElement = marker.getElement();
+    if (markerElement) markerElement.classList.toggle("is-active", location.id === locationId);
+    marker.setZIndexOffset(location.id === locationId ? 1000 : 0);
+  });
+  if (moveMap && activitiesMap) {
+    const location = activityLocations.find(function (item) { return item.id === locationId; });
+    if (location) activitiesMap.panTo(location.coordinates, { animate: true, duration: .35 });
+  }
+}
+
+function initializeActivitiesMap() {
+  const mapElement = document.getElementById("activitiesMap");
+  if (!mapElement || !window.L) return;
+  if (activitiesMap) {
+    activitiesMap.invalidateSize();
+    return;
+  }
+
+  mapElement.innerHTML = "";
+  activitiesMap = window.L.map(mapElement, { scrollWheelZoom: false, tap: true });
+  window.L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    subdomains: "abcd",
+    maxZoom: 20,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  }).addTo(activitiesMap);
+
+  activityLocations.forEach(function (location) {
+    const icon = window.L.divIcon({
+      className: "map-pin activity-pin activity-pin-" + location.number,
+      html: '<span class="map-pin-shape"><b>' + location.number + "</b></span>",
+      iconSize: [40, 40], iconAnchor: [20, 20], popupAnchor: [0, -22]
+    });
+    const marker = window.L.marker(location.coordinates, { icon: icon, keyboard: true, title: location.label }).addTo(activitiesMap);
+    marker.bindPopup("<strong>" + location.label + "</strong><br>" + location.detail);
+    marker.on("mouseover", function () { setActiveActivityLocation(location.id, false); });
+    marker.on("mouseout", function () { setActiveActivityLocation(null, false); });
+    marker.on("click", function () { setActiveActivityLocation(location.id, true); marker.openPopup(); });
+    activityMarkers[location.id] = marker;
+  });
+
+  activitiesMap.fitBounds(window.L.latLngBounds(activityLocations.map(function (location) { return location.coordinates; })), { padding: [34, 34], maxZoom: 11 });
+  document.querySelectorAll(".activity-map-link").forEach(function (link) {
+    link.addEventListener("mouseenter", function () { setActiveActivityLocation(link.dataset.activityLocation, true); });
+    link.addEventListener("mouseleave", function () { setActiveActivityLocation(null, false); });
+    link.addEventListener("focus", function () { setActiveActivityLocation(link.dataset.activityLocation, true); });
+    link.addEventListener("blur", function () { setActiveActivityLocation(null, false); });
+  });
+}
+
 /* Lodgix serves the availability calendar cross-origin, so its own layout cannot be
    restyled. Give it the narrowest complete seven-column viewport, then scale that
    fixed canvas only when the available width is smaller. This keeps Edge from
@@ -227,6 +296,12 @@ function setRoute(route, updateHistory) {
   window.scrollTo({ top: 0, behavior: "instant" });
   if (safeRoute === "gallery") updateGallery(currentIndex, false);
   if (safeRoute === "book") fitBookingCalendar();
+  if (safeRoute === "activities") {
+    window.setTimeout(function () {
+      initializeActivitiesMap();
+      if (activitiesMap) activitiesMap.invalidateSize();
+    }, 0);
+  }
   if (safeRoute === "explore") {
     window.setTimeout(function () {
       initializePristineBayMap();
@@ -236,8 +311,10 @@ function setRoute(route, updateHistory) {
 }
 
 routeButtons.forEach(function (button) {
-  button.addEventListener("click", function () {
+  button.addEventListener("click", function (event) {
+    if (button.tagName === "A") event.preventDefault();
     setRoute(button.dataset.route, true);
+    if (button.dataset.galleryFilter) applyFilter(button.dataset.galleryFilter);
   });
 });
 
