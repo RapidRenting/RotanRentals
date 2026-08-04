@@ -267,6 +267,22 @@ function initializeActivitiesMap() {
 const CALENDAR_WIDTH = 500;
 const CALENDAR_HEIGHT = 840;
 
+/* Keep interaction measurement first-party and invisible. Each event loads a
+   no-index page carrying the same Cloudflare Web Analytics beacon, which makes
+   named interactions filterable by path without collecting personal details. */
+function trackSiteEvent(eventName) {
+  const safeName = String(eventName).replace(/[^a-z0-9-]/gi, "").toLowerCase();
+  if (!safeName) return;
+
+  const beaconFrame = document.createElement("iframe");
+  beaconFrame.hidden = true;
+  beaconFrame.tabIndex = -1;
+  beaconFrame.setAttribute("aria-hidden", "true");
+  beaconFrame.src = "/analytics-events/" + safeName + "/";
+  document.body.appendChild(beaconFrame);
+  window.setTimeout(function () { beaconFrame.remove(); }, 5000);
+}
+
 function fitBookingCalendar() {
   const frame = document.getElementById("bookingCalendar");
   const frameWidth = frame.clientWidth;
@@ -292,7 +308,10 @@ function setRoute(route, updateHistory) {
   });
   navLinks.classList.remove("open");
   menuButton.setAttribute("aria-expanded", "false");
-  if (updateHistory) history.pushState({ route: safeRoute }, "", "#" + safeRoute);
+  if (updateHistory) {
+    history.pushState({ route: safeRoute }, "", "#" + safeRoute);
+    trackSiteEvent("section-" + safeRoute);
+  }
   window.scrollTo({ top: 0, behavior: "instant" });
   if (safeRoute === "gallery") updateGallery(currentIndex, false);
   if (safeRoute === "book") fitBookingCalendar();
@@ -315,6 +334,18 @@ routeButtons.forEach(function (button) {
     if (button.tagName === "A") event.preventDefault();
     setRoute(button.dataset.route, true);
     if (button.dataset.galleryFilter) applyFilter(button.dataset.galleryFilter);
+  });
+});
+
+document.querySelectorAll(".booking-cta").forEach(function (link) {
+  link.addEventListener("click", function () {
+    trackSiteEvent("booking-page-open");
+  });
+});
+
+document.querySelectorAll('a[href*="roatanpropertymanagement.com"]').forEach(function (link) {
+  link.addEventListener("click", function () {
+    trackSiteEvent("property-manager-click");
   });
 });
 
