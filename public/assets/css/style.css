@@ -176,6 +176,21 @@ a:focus-visible, button:focus-visible, video:focus-visible, select:focus-visible
 }
 .brand:hover .brand-mark { box-shadow: 0 10px 22px -8px rgba(9, 42, 45, .5); transform: rotate(-6deg); }
 .nav-links { display: flex; align-items: center; gap: .2rem; }
+.language-toggle {
+  display: inline-flex;
+  min-width: 2.55rem;
+  min-height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0 .2rem;
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  color: var(--teal-800);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+.language-toggle:hover { border-color: var(--aqua-600); color: var(--aqua-600); }
 .nav-button {
   position: relative;
   padding: .64rem .95rem;

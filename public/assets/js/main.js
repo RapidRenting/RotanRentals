@@ -1,3 +1,5 @@
+const isSpanish = document.documentElement.lang.toLowerCase().startsWith("es");
+
 const photos = [
   { file: "villa-aerial-front.jpg", category: "outdoor", categoryLabel: "Aerial exterior", label: "Villa and private pool from the fairway side" },
   { file: "villa-aerial-caribbean.jpg", category: "outdoor", categoryLabel: "Aerial exterior", label: "1111 Pearl Court with the Caribbean beyond" },
@@ -58,6 +60,104 @@ const photos = [
   { file: "black-pearl-fairway-hills.jpg", category: "location", categoryLabel: "Black Pearl Golf Course", label: "Rolling fairways and green hills of Pristine Bay" }
 ];
 
+const spanishPhotoCategories = {
+  "Aerial exterior": "Vista aérea exterior",
+  "Garden entrance": "Entrada del jardín",
+  "Garden exterior": "Jardín exterior",
+  "Pool terrace": "Terraza de la piscina",
+  "Private infinity pool": "Piscina infinita privada",
+  "Patio lounge": "Sala en la terraza",
+  "Poolside lounge": "Sala junto a la piscina",
+  "Outdoor dining": "Comedor exterior",
+  "Covered patio": "Terraza techada",
+  "Living room": "Sala",
+  "Main-level work nook": "Espacio de trabajo en la planta principal",
+  "Dining area": "Comedor",
+  "Entry hall": "Vestíbulo",
+  "Kitchen": "Cocina",
+  "Open-plan main level": "Planta principal de concepto abierto",
+  "Main-level powder room": "Medio baño en la planta principal",
+  "Primary bedroom": "Dormitorio principal",
+  "Primary bedroom terrace": "Terraza del dormitorio principal",
+  "Primary bedroom closet": "Vestidor del dormitorio principal",
+  "Primary ensuite": "Baño de la suite principal",
+  "Guest bedroom": "Dormitorio de huéspedes",
+  "Guest bedroom closet": "Vestidor del dormitorio de huéspedes",
+  "Guest bedroom terrace": "Terraza del dormitorio de huéspedes",
+  "Guest bedroom bathroom": "Baño del dormitorio de huéspedes",
+  "Black Pearl Golf Course": "Campo de golf Black Pearl",
+  "Sports courts": "Canchas deportivas",
+  "Pristine Bay Beach Club": "Beach Club de Pristine Bay",
+  "Beach access": "Acceso a la playa"
+};
+
+const spanishPhotoLabels = [
+  "Villa y piscina privada vistas desde el campo de golf",
+  "1111 Pearl Court con el Caribe al fondo",
+  "Vista aérea de la villa, piscina infinita privada y terrazas",
+  "Entrada de la villa enmarcada por buganvilias",
+  "Jardín y espacios exteriores techados",
+  "Jardín a nivel de la terraza de la piscina",
+  "Terraza de la piscina privada con comedor y sala",
+  "Piscina infinita a nivel del jardín",
+  "Sala con sombra bajo la pérgola del jardín",
+  "Sala techada junto a la piscina infinita",
+  "Mesa de comedor con vista a la piscina privada",
+  "Tumbonas junto al borde infinito",
+  "Terraza techada con sala y comedor",
+  "Sala luminosa en la planta principal con acceso a la piscina",
+  "Sala con acceso directo a la terraza de la piscina",
+  "Espacio de escritorio en la planta principal de concepto abierto",
+  "Comedor conectado con la sala y la cocina",
+  "Entrada principal y escaleras hacia las dos suites con cama king",
+  "Comedor con puertas al jardín y luz tropical",
+  "Isla de granito y electrodomésticos de acero inoxidable",
+  "Estufa, refrigerador y gabinetes de madera",
+  "Cocina totalmente equipada con amplio espacio de almacenamiento",
+  "Isla de cocina con vista hacia el comedor y la sala",
+  "Cocina, comedor y sala de concepto abierto",
+  "Cómoda sala frente a la terraza de la piscina",
+  "Práctico medio baño en la planta principal",
+  "Dormitorio principal con cama king y techo alto de madera",
+  "Cama king rodeada de muebles de madera",
+  "Dormitorio principal con puertas a su terraza privada",
+  "Terraza privada amueblada con vista a Pristine Bay",
+  "Terraza privada de la suite principal con cama king",
+  "Vista de la piscina infinita y las colinas desde la terraza principal",
+  "Vestidor con almacenamiento de madera integrado",
+  "Inodoro privado en el baño de la suite principal",
+  "Tocador con acabado de piedra en el baño principal",
+  "Ducha amplia en el baño de la suite principal",
+  "Dormitorio de huéspedes con cama king y techo alto de madera",
+  "Vestidor junto al dormitorio de huéspedes",
+  "Dormitorio de huéspedes con cama king, televisión y baño privado",
+  "Terraza privada de huéspedes con vistas tropicales",
+  "Dormitorio de huéspedes con acceso a su terraza privada",
+  "Baño privado de huéspedes con bañera y ducha",
+  "Asientos acogedores en la terraza de huéspedes",
+  "Tocador y ducha en el baño de huéspedes",
+  "Campo de golf, costa y aguas del Caribe en Pristine Bay",
+  "Comunidad Pristine Bay a lo largo de la costa caribeña",
+  "Villas entre los ondulados campos de golf",
+  "Canchas de tenis y pickleball dentro de Pristine Bay",
+  "Piscinas de Beach Club junto a la costa caribeña",
+  "Vista aérea de las piscinas y jardines de Beach Club",
+  "Entrada de la villa en Pearl Court",
+  "Entrada a Beach Club de Pristine Bay",
+  "Jardín de palmeras que conduce hacia el mar",
+  "Piscina infinita de Beach Club frente al Caribe",
+  "Costa de arena y aguas tranquilas del Caribe",
+  "Campo tropical de Black Pearl Golf Course",
+  "Campos ondulados y colinas verdes de Pristine Bay"
+];
+
+if (isSpanish) {
+  photos.forEach(function (photo, index) {
+    photo.categoryLabel = spanishPhotoCategories[photo.categoryLabel] || photo.categoryLabel;
+    photo.label = spanishPhotoLabels[index] || photo.label;
+  });
+}
+
 const routeNames = ["home", "gallery", "activities", "explore", "book"];
 const views = Array.from(document.querySelectorAll("[data-view]"));
 const routeButtons = Array.from(document.querySelectorAll(".route-button"));
@@ -101,36 +201,36 @@ const lightboxPointers = new Map();
 let pristineBayMap = null;
 const pristineBayMarkers = {};
 const pristineBayLocations = [
-  { id: "villa", number: 1, label: "1111 Pearl Court", detail: "Villa and private pool", coordinates: [16.373745, -86.464218] },
-  { id: "golf", number: 2, label: "Black Pearl Golf Course", detail: "18-hole course", coordinates: [16.3723, -86.458] },
-  { id: "beach", number: 3, label: "Pristine Bay Beach Club", detail: "Pools and Caribbean shoreline", coordinates: [16.37545, -86.46532] },
-  { id: "scuba", number: 4, label: "Pristine Bay Scuba Shop", detail: "Dive experiences and equipment", coordinates: [16.3761, -86.4639] }
+  { id: "villa", number: 1, label: "1111 Pearl Court", detail: isSpanish ? "Villa y piscina privada" : "Villa and private pool", coordinates: [16.373745, -86.464218] },
+  { id: "golf", number: 2, label: "Black Pearl Golf Course", detail: isSpanish ? "Campo de 18 hoyos" : "18-hole course", coordinates: [16.3723, -86.458] },
+  { id: "beach", number: 3, label: "Pristine Bay Beach Club", detail: isSpanish ? "Piscinas y costa caribeña" : "Pools and Caribbean shoreline", coordinates: [16.37545, -86.46532] },
+  { id: "scuba", number: 4, label: "Pristine Bay Scuba Shop", detail: isSpanish ? "Experiencias y equipo de buceo" : "Dive experiences and equipment", coordinates: [16.3761, -86.4639] }
 ];
 let activitiesMap = null;
 const activityMarkers = {};
 const activityLocations = [
   { id: "golf", number: 1, label: "Black Pearl Golf Course", detail: "Golf", coordinates: [16.3723, -86.458] },
-  { id: "scuba", number: 2, label: "Pristine Bay Scuba Shop", detail: "Diving", coordinates: [16.3761, -86.4639] },
-  { id: "beachclub", number: 3, label: "Pristine Bay Beach Club", detail: "Beach club", coordinates: [16.37545, -86.46532] },
-  { id: "westbay", number: 4, label: "West Bay Beach", detail: "Beach", coordinates: [16.2734, -86.5991] },
-  { id: "westend", number: 5, label: "West End Dining", detail: "Dining", coordinates: [16.3054, -86.5936] },
-  { id: "brewery", number: 6, label: "Roatán Island Brewing Company", detail: "Brewery", coordinates: [16.3517, -86.5238] },
-  { id: "carambola", number: 7, label: "Carambola Botanical Gardens", detail: "Attraction", coordinates: [16.3371, -86.5682] },
-  { id: "iguana", number: 8, label: "Arch’s Iguana & Marine Park", detail: "Family stop", coordinates: [16.3554, -86.4408] }
+  { id: "scuba", number: 2, label: "Pristine Bay Scuba Shop", detail: isSpanish ? "Buceo" : "Diving", coordinates: [16.3761, -86.4639] },
+  { id: "beachclub", number: 3, label: "Pristine Bay Beach Club", detail: isSpanish ? "Club de playa" : "Beach club", coordinates: [16.37545, -86.46532] },
+  { id: "westbay", number: 4, label: "West Bay Beach", detail: isSpanish ? "Playa" : "Beach", coordinates: [16.2734, -86.5991] },
+  { id: "westend", number: 5, label: isSpanish ? "Restaurantes de West End" : "West End Dining", detail: isSpanish ? "Restaurantes" : "Dining", coordinates: [16.3054, -86.5936] },
+  { id: "brewery", number: 6, label: "Roatán Island Brewing Company", detail: isSpanish ? "Cervecería" : "Brewery", coordinates: [16.3517, -86.5238] },
+  { id: "carambola", number: 7, label: "Carambola Botanical Gardens", detail: isSpanish ? "Atracción" : "Attraction", coordinates: [16.3371, -86.5682] },
+  { id: "iguana", number: 8, label: "Arch’s Iguana & Marine Park", detail: isSpanish ? "Paseo familiar" : "Family stop", coordinates: [16.3554, -86.4408] }
 ];
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
 function webpPath(file) {
-  return "assets/media/enhanced/" + file.replace(/\.(jpe?g)$/i, ".webp");
+  return "/assets/media/enhanced/" + file.replace(/\.(jpe?g)$/i, ".webp");
 }
 
 function originalPath(file) {
-  return "assets/media/gallery/" + file;
+  return "/assets/media/gallery/" + file;
 }
 
 function thumbPath(file) {
-  return "assets/media/thumbs/" + file.replace(/\.(jpe?g)$/i, ".webp");
+  return "/assets/media/thumbs/" + file.replace(/\.(jpe?g)$/i, ".webp");
 }
 
 function setActiveMapLocation(locationId, moveMap) {
@@ -364,7 +464,7 @@ function renderThumbnails() {
     return [
       '<button class="thumb', photoIndex === currentIndex ? " is-active" : "",
       '" type="button" data-index="', photoIndex,
-      '" aria-label="Show photo ', filteredPosition + 1, " of ", filteredIndexes.length, ": ", photo.label, '">',
+      '" aria-label="', isSpanish ? "Mostrar foto " : "Show photo ", filteredPosition + 1, isSpanish ? " de " : " of ", filteredIndexes.length, ": ", photo.label, '">',
       '<img src="', thumbPath(photo.file), '" alt="" loading="lazy" decoding="async" />',
       '<span>', String(filteredPosition + 1).padStart(2, "0"), "</span></button>"
     ].join("");
@@ -413,7 +513,7 @@ function applyFilter(filter) {
     button.setAttribute("aria-pressed", String(active));
   });
   filterSelect.value = filter;
-  galleryResultCount.textContent = filteredIndexes.length + (filteredIndexes.length === 1 ? " photo" : " photos");
+  galleryResultCount.textContent = filteredIndexes.length + (isSpanish ? (filteredIndexes.length === 1 ? " foto" : " fotos") : (filteredIndexes.length === 1 ? " photo" : " photos"));
   currentIndex = filteredIndexes[0];
   renderThumbnails();
   updateGallery(currentIndex, false);
@@ -649,8 +749,8 @@ document.getElementById("bookingReset").addEventListener("click", function () {
   const resetButton = this;
   document.getElementById("bookingCalendar").classList.remove("is-loaded");
   bookingIframe.src = bookingUrl;
-  resetButton.textContent = "Calendar restored";
-  window.setTimeout(function () { resetButton.textContent = "Return to calendar"; }, 1800);
+  resetButton.textContent = isSpanish ? "Calendario restablecido" : "Calendar restored";
+  window.setTimeout(function () { resetButton.textContent = isSpanish ? "Volver al calendario" : "Return to calendar"; }, 1800);
 });
 
 window.addEventListener("resize", function () {

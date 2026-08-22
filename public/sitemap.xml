@@ -1,19 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://staypristinebay.com/</loc>
-    <lastmod>2026-08-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://staypristinebay.com/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://staypristinebay.com/es/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://staypristinebay.com/" />
+    <lastmod>2026-08-22</lastmod>
+  </url>
+  <url>
+    <loc>https://staypristinebay.com/es/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://staypristinebay.com/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://staypristinebay.com/es/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://staypristinebay.com/" />
+    <lastmod>2026-08-22</lastmod>
   </url>
   <url>
     <loc>https://staypristinebay.com/pristine-bay-vacation-rental/</loc>
-    <lastmod>2026-08-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://staypristinebay.com/pristine-bay-vacation-rental/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://staypristinebay.com/es/pristine-bay-vacation-rental/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://staypristinebay.com/pristine-bay-vacation-rental/" />
+    <lastmod>2026-08-22</lastmod>
+  </url>
+  <url>
+    <loc>https://staypristinebay.com/es/pristine-bay-vacation-rental/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://staypristinebay.com/pristine-bay-vacation-rental/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://staypristinebay.com/es/pristine-bay-vacation-rental/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://staypristinebay.com/pristine-bay-vacation-rental/" />
+    <lastmod>2026-08-22</lastmod>
   </url>
   <url>
     <loc>https://staypristinebay.com/roatan-golf-and-diving/</loc>
-    <lastmod>2026-08-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://staypristinebay.com/roatan-golf-and-diving/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://staypristinebay.com/es/roatan-golf-and-diving/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://staypristinebay.com/roatan-golf-and-diving/" />
+    <lastmod>2026-08-22</lastmod>
+  </url>
+  <url>
+    <loc>https://staypristinebay.com/es/roatan-golf-and-diving/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://staypristinebay.com/roatan-golf-and-diving/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://staypristinebay.com/es/roatan-golf-and-diving/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://staypristinebay.com/roatan-golf-and-diving/" />
+    <lastmod>2026-08-22</lastmod>
   </url>
   <url>
     <loc>https://staypristinebay.com/villa-and-amenities/</loc>
-    <lastmod>2026-08-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://staypristinebay.com/villa-and-amenities/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://staypristinebay.com/es/villa-and-amenities/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://staypristinebay.com/villa-and-amenities/" />
+    <lastmod>2026-08-22</lastmod>
+  </url>
+  <url>
+    <loc>https://staypristinebay.com/es/villa-and-amenities/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://staypristinebay.com/villa-and-amenities/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://staypristinebay.com/es/villa-and-amenities/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://staypristinebay.com/villa-and-amenities/" />
+    <lastmod>2026-08-22</lastmod>
   </url>
 </urlset>
