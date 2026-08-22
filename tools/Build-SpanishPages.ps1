@@ -40,7 +40,7 @@ $shared = [ordered]@{
   '>Roatán golf and diving</a>' = '>Golf y buceo en Roatán</a>'
   '>Villa and amenities</a>' = '>Villa y comodidades</a>'
   '<span>Contact them for more information, booking follow-up, payment, and scheduling.</span>' = '<span>Contáctelos para más información y para dar seguimiento a su reservación, pago y fechas.</span>'
-  'data-language-switch="es" aria-label="Ver esta página en español">ES</a>' = 'data-language-switch="en" aria-label="Ver esta página en inglés">EN</a>'
+  'data-language-switch="es" aria-label="Ver esta página en español"><i class="material-symbols-rounded" aria-hidden="true">language</i><span>Español</span></a>' = 'data-language-switch="en" aria-label="Ver esta página en inglés"><i class="material-symbols-rounded" aria-hidden="true">language</i><span>English</span></a>'
 }
 
 $homePage = [ordered]@{}
