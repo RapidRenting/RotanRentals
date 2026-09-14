@@ -437,7 +437,7 @@ routeButtons.forEach(function (button) {
   });
 });
 
-document.querySelectorAll(".booking-cta").forEach(function (link) {
+document.querySelectorAll('a[href*="lodgix.com"]').forEach(function (link) {
   link.addEventListener("click", function () {
     trackSiteEvent("booking-page-open");
   });

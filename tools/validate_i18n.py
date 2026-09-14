@@ -162,11 +162,35 @@ def validate_sitemap() -> list[str]:
     return errors
 
 
+def validate_booking_analytics() -> list[str]:
+    errors: list[str] = []
+    event_path = "/analytics-events/booking-page-open/"
+    for relative_path in ("index.html", "es/index.html"):
+        page = (PUBLIC / relative_path).read_text(encoding="utf-8")
+        outbound_links = re.findall(r'<a\b[^>]*\bhref="https://www\.lodgix\.com/', page)
+        if len(outbound_links) != 2:
+            errors.append(f"{relative_path}: expected exactly two explicit Lodgix booking links")
+
+    script = (PUBLIC / "assets/js/main.js").read_text(encoding="utf-8")
+    if 'document.querySelectorAll(\'a[href*="lodgix.com"]\')' not in script:
+        errors.append("assets/js/main.js: Lodgix booking links are not tracked")
+    if 'trackSiteEvent("booking-page-open")' not in script:
+        errors.append("assets/js/main.js: booking click event is missing")
+
+    event_page = (PUBLIC / event_path.strip("/") / "index.html").read_text(encoding="utf-8")
+    if 'name="robots" content="noindex,nofollow"' not in event_page:
+        errors.append("booking analytics event page must remain noindex,nofollow")
+    if event_path in (PUBLIC / "sitemap.xml").read_text(encoding="utf-8"):
+        errors.append("booking analytics event page must not appear in sitemap.xml")
+    return errors
+
+
 def main() -> int:
     errors = []
     for pair in PAGE_PAIRS:
         errors.extend(validate_page_pair(*pair))
     errors.extend(validate_sitemap())
+    errors.extend(validate_booking_analytics())
     if errors:
         print("Bilingual site validation failed:")
         for error in errors:

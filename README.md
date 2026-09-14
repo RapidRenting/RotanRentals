@@ -31,6 +31,12 @@ node tools/test_language_redirect.js
 
 The validation checks English/Spanish structural parity, reciprocal `hreflang` links, self-canonicals, JSON-LD, indexing directives, the required property-management handoff, and all eight sitemap entries.
 
+## Booking click analytics
+
+Cloudflare Web Analytics is already installed as the site's free, privacy-conscious analytics service. To see how often a visitor opens the Lodgix booking page, filter **Path** to exactly `/analytics-events/booking-page-open/`, exclude bots, and use **Page views** as the outbound booking-click count. `/analytics-events/section-book/` separately shows opens of the availability section.
+
+This reports clicks from the site, not unique people, completed bookings, or activity within the embedded Lodgix calendar. Privacy tools and ad blockers can undercount; repeat clicks can overcount people.
+
 ## Custom domain
 
 Add a `CNAME` file into `public/` with your domain and commit.
