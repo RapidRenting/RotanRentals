@@ -242,6 +242,15 @@ function thumbPath(file) {
   return "/assets/media/thumbs/" + file.replace(/\.(jpe?g)$/i, ".webp");
 }
 
+/* OpenStreetMap's own tiles need no API key or account; its tile usage policy
+   asks for the attribution below, which Leaflet shows on the map. */
+function addBaseTiles(map) {
+  window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+}
+
 function setActiveMapLocation(locationId, moveMap) {
   document.querySelectorAll(".map-location-link").forEach(function (link) {
     link.classList.toggle("is-active", link.dataset.mapLocation === locationId);
@@ -272,11 +281,7 @@ function initializePristineBayMap() {
     scrollWheelZoom: false,
     tap: true
   });
-  window.L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-    subdomains: "abcd",
-    maxZoom: 20,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-  }).addTo(pristineBayMap);
+  addBaseTiles(pristineBayMap);
 
   pristineBayLocations.forEach(function (location) {
     const icon = window.L.divIcon({
@@ -339,11 +344,7 @@ function initializeActivitiesMap() {
 
   mapElement.innerHTML = "";
   activitiesMap = window.L.map(mapElement, { scrollWheelZoom: false, tap: true });
-  window.L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-    subdomains: "abcd",
-    maxZoom: 20,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-  }).addTo(activitiesMap);
+  addBaseTiles(activitiesMap);
 
   activityLocations.forEach(function (location) {
     const icon = window.L.divIcon({
