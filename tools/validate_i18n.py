@@ -191,6 +191,7 @@ def validate_analytics_beacons() -> list[str]:
     installation_token = "dbda8af15e39403cb84db871c0b8263f"
     pages = [PUBLIC / item for pair in PAGE_PAIRS for item in pair[:2]]
     pages.extend((PUBLIC / "analytics-events").glob("*/index.html"))
+    pages.append(PUBLIC / "404.html")
     for path in pages:
         html = path.read_text(encoding="utf-8")
         snippets = re.findall(r'data-cf-beacon=\'([^\']+)\'', html)
@@ -246,6 +247,27 @@ def validate_local_assets() -> list[str]:
     return errors
 
 
+def validate_icon_font() -> list[str]:
+    """The icon font is subset with icon_names, so every icon used must be listed."""
+    errors: list[str] = []
+    for page in sorted(PUBLIC.rglob("*.html")):
+        html = page.read_text(encoding="utf-8")
+        used = set(re.findall(r'class="material-symbols-rounded[^"]*"[^>]*>([a-z0-9_]+)<', html))
+        if not used:
+            continue
+        listed = re.findall(r"Material\+Symbols\+Rounded[^\"]*?&(?:amp;)?icon_names=([a-z0-9_,]+)", html)
+        if len(listed) != 1:
+            errors.append(f"{page.relative_to(PUBLIC)}: icon font link must carry one icon_names list")
+            continue
+        names = listed[0].split(",")
+        if names != sorted(names):
+            errors.append(f"{page.relative_to(PUBLIC)}: icon_names must be in alphabetical order")
+        missing = sorted(used - set(names))
+        if missing:
+            errors.append(f"{page.relative_to(PUBLIC)}: add {', '.join(missing)} to the icon font icon_names list")
+    return errors
+
+
 def main() -> int:
     errors = []
     for pair in PAGE_PAIRS:
@@ -254,6 +276,7 @@ def main() -> int:
     errors.extend(validate_booking_analytics())
     errors.extend(validate_analytics_beacons())
     errors.extend(validate_local_assets())
+    errors.extend(validate_icon_font())
     if errors:
         print("Bilingual site validation failed:")
         for error in errors:

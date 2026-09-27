@@ -44,6 +44,14 @@ node tools/test_language_redirect.js
 
 The validation checks English/Spanish structural parity, reciprocal `hreflang` links, self-canonicals, JSON-LD, indexing directives, the required property-management handoff, and all eight sitemap entries.
 
+## Icons
+
+Icons use Google's Material Symbols Rounded font, loaded with an `icon_names=` list so only the icons the site uses are downloaded. When adding an icon to a page, add its name to that list on every page (it must stay in alphabetical order); `tools/validate_i18n.py` reports any icon missing from the list.
+
+## Not-found page
+
+`public/404.html` is served by GitHub Pages for any missing address. It is bilingual, `noindex`, and carries the analytics beacon, so broken links show up in Cloudflare under their original path.
+
 ## Booking click analytics
 
 Cloudflare Web Analytics is already installed as the site's free, privacy-conscious analytics service. To see how often a visitor opens the Lodgix booking page, filter **Path** to exactly `/analytics-events/booking-page-open/`, exclude bots, and use **Page views** as the outbound booking-click count. `/analytics-events/section-book/` separately shows opens of the availability section.
