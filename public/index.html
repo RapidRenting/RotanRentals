@@ -85,11 +85,12 @@
   }
   </script>
   <link rel="icon" type="image/png" href="assets/media/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=ac_unit,balcony,bathtub,beach_access,bed,calendar_month,checkroom,directions_car,family_restroom,golf_course,groups,info,king_bed,kitchen,language,local_laundry_service,location_on,lock,lunch_dining,mail,person,photo_camera,pool,restaurant,schedule,scuba_diving,shopping_bag,shower,sports_bar,sunny,waves,wb_sunny,wifi&display=block" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/style.css?v=20260927b" />
+  <link rel="stylesheet" href="/assets/css/style.css?v=20260927c" />
   <link rel="stylesheet" href="assets/css/landing.css?v=20260927a" />
   <script src="/assets/js/language.js?v=20260927a"></script>
 </head>
@@ -98,20 +99,20 @@
 
   <header class="app-header">
     <nav class="nav-shell" aria-label="Primary navigation">
-      <button class="brand route-button" type="button" data-route="home" aria-label="Pristine Bay Villa home">
+      <a class="brand route-button" href="#home" data-route="home" aria-label="Pristine Bay Villa home">
         <span class="brand-mark" aria-hidden="true">R</span>
         <span><strong>Roatán Villa</strong><small>Pristine Bay</small></span>
-      </button>
+      </a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navLinks">
         <span></span><span></span><span class="sr-only">Open navigation</span>
       </button>
       <div class="nav-links" id="navLinks">
-        <button class="nav-button route-button is-active" type="button" data-route="home" aria-current="page">Overview</button>
-        <button class="nav-button route-button" type="button" data-route="gallery">Gallery</button>
-        <button class="nav-button route-button" type="button" data-route="activities">Activities</button>
-        <button class="nav-button route-button" type="button" data-route="explore">Pristine Bay</button>
+        <a class="nav-button route-button is-active" href="#home" data-route="home" aria-current="page">Overview</a>
+        <a class="nav-button route-button" href="#gallery" data-route="gallery">Gallery</a>
+        <a class="nav-button route-button" href="#activities" data-route="activities">Activities</a>
+        <a class="nav-button route-button" href="#explore" data-route="explore">Pristine Bay</a>
         <a class="language-toggle" href="/es/" hreflang="es" lang="es" data-language-switch="es" aria-label="Ver esta página en español"><i class="material-symbols-rounded" aria-hidden="true">language</i><span>Español</span></a>
-        <button class="btn btn-book route-button" type="button" data-route="book">Availability</button>
+        <a class="btn btn-book route-button" href="#book" data-route="book">Availability</a>
       </div>
     </nav>
   </header>
@@ -422,6 +423,6 @@
   </div>
 
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"dbda8af15e39403cb84db871c0b8263f"}'></script>
-  <script src="/assets/js/main.js?v=20260927b"></script>
+  <script src="/assets/js/main.js?v=20260927c"></script>
 </body>
 </html>
