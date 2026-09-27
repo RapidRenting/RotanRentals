@@ -84,7 +84,7 @@
   .landing-feature-copy { max-width: 44rem; }
   .landing-cards { grid-template-columns: 1fr; }
   .landing-card { display: grid; grid-template-columns: minmax(12rem, .8fr) minmax(0, 1.2fr); }
-  .landing-card img { height: 100%; aspect-ratio: auto; }
+  .landing-card img { height: 100%; min-height: 12rem; aspect-ratio: auto; }
 }
 
 @media (max-width: 700px) {
@@ -97,7 +97,7 @@
   .landing-fact:nth-child(2) { border-right: 0; }
   .landing-fact:nth-child(n+3) { border-bottom: 0; }
   .landing-card { display: block; }
-  .landing-card img { width: 100%; aspect-ratio: 4 / 3; }
+  .landing-card img { width: 100%; height: auto; min-height: 0; aspect-ratio: 4 / 3; }
   .landing-list { grid-template-columns: 1fr; }
   .guide-links-inner { align-items: flex-start; flex-direction: column; }
 }

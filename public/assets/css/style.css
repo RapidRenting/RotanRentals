@@ -65,11 +65,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 body.lightbox-open { overflow: hidden; }
-img, video { display: block; max-width: 100%; }
+/* height:auto lets CSS aspect-ratio (or the photo itself) set the shape; the
+   width/height attributes then only reserve space while images load. */
+img, video { display: block; max-width: 100%; height: auto; }
 button, input, select { font: inherit; }
 button { color: inherit; }
 a { color: inherit; text-decoration: none; }
 .material-symbols-rounded { font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24; }
+/* Icons are ligatures: the lowercase name ("king_bed") becomes the symbol. Any
+   inherited uppercase, letter-spacing or bold breaks that and prints the name,
+   so no component style may change these. */
+.material-symbols-rounded { font-style: normal !important; font-weight: 400 !important; letter-spacing: normal !important; text-transform: none !important; }
 /* language.js sets .icons-pending until the icon font has loaded, so a slow or
    blocked font never prints ligature names such as "scuba_diving". :where()
    keeps the 1em box below any component rule that sizes an icon circle. */
@@ -725,8 +731,8 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 .activity-category-icon i { font-size: 1.2rem; font-style: normal; }
 .activity-category img { width: 100%; height: 6.2rem; object-fit: cover; }
 .activity-category strong { padding: .55rem .65rem 0; font-family: var(--serif); font-size: 1rem; font-weight: 600; }
-.activity-category small { padding: .15rem .65rem 0; color: var(--muted); font-size: .61rem; line-height: 1.4; }
-.activity-category em { align-self: end; padding: .55rem .65rem .65rem; color: var(--teal-700); font-size: .62rem; font-style: normal; font-weight: 700; }
+.activity-category small { padding: .15rem .65rem 0; color: var(--muted); font-size: .74rem; line-height: 1.4; }
+.activity-category em { align-self: end; padding: .55rem .65rem .65rem; color: var(--teal-700); font-size: .72rem; font-style: normal; font-weight: 700; }
 .activities-map-card { display: grid; max-width: 1440px; min-height: 27rem; margin: 0 auto 1rem; overflow: hidden; grid-template-columns: minmax(0, 1.35fr) minmax(25rem, .65fr); border-radius: var(--r-lg); box-shadow: var(--shadow-md); }
 .activities-map { min-height: 27rem; background: #dce8df; }
 .activities-map .leaflet-tile-pane { filter: saturate(.6) contrast(.92) brightness(1.03); }
@@ -737,26 +743,26 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 .nearby-list a:nth-child(3n + 1) b { background: #9bd14f; }
 .nearby-list a:nth-child(3n) b { background: var(--sun-400); }
 .nearby-list strong { font-size: .72rem; }
-.nearby-list span { color: rgba(255,255,255,.64); font-size: .64rem; }
+.nearby-list span { color: rgba(255,255,255,.64); font-size: .72rem; }
 .nearby-list i { color: var(--aqua-300); font-size: 1rem; font-style: normal; }
 .nearby-list a.is-active { background: rgba(255,255,255,.1); transform: translateX(.2rem); }
-.nearby-panel > small { display: block; margin-top: .7rem; color: rgba(255,255,255,.55); font-size: .6rem; }
+.nearby-panel > small { display: block; margin-top: .7rem; color: rgba(255,255,255,.55); font-size: .72rem; }
 .activity-guides { display: grid; max-width: 1440px; margin: 0 auto 1rem; grid-template-columns: 1.2fr 1fr; gap: 1rem; }
 .activity-guides > section { padding: 1rem 1.15rem; border: 1px solid var(--line-soft); border-radius: var(--r-md); background: rgba(255,255,255,.64); }
 .activity-guides h3 { margin: 0; font-family: var(--serif); font-size: 1.35rem; font-weight: 600; }
-.activity-guides > section > p { margin: .1rem 0 .75rem; color: var(--muted); font-size: .62rem; }
+.activity-guides > section > p { margin: .1rem 0 .75rem; color: var(--muted); font-size: .78rem; }
 .route-ideas { display: grid; grid-template-columns: repeat(3, 1fr); gap: .55rem; }
 .route-ideas article { display: grid; min-width: 0; overflow: hidden; grid-template-columns: 4.7rem 1fr; border: 1px solid var(--line-soft); border-radius: var(--r-sm); background: var(--white); }
 .route-ideas img { width: 100%; height: 100%; min-height: 7.2rem; object-fit: cover; }
 .route-ideas div { padding: .7rem .6rem; }
 .route-ideas strong, .close-grid strong { display: block; font-family: var(--serif); font-size: .8rem; }
-.route-ideas p, .close-grid p { margin: .3rem 0; color: var(--muted); font-size: .6rem; }
-.route-ideas a { color: var(--teal-700); font-size: .59rem; font-weight: 700; }
+.route-ideas p, .close-grid p { margin: .3rem 0; color: var(--muted); font-size: .74rem; }
+.route-ideas a { color: var(--teal-700); font-size: .72rem; font-weight: 700; }
 .close-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
 .close-grid article { padding: 0 .75rem; border-left: 1px solid var(--line-soft); }
 .close-grid article:first-child { border-left: 0; padding-left: 0; }
 .close-grid i { display: grid; width: 2.1rem; height: 2.1rem; margin-bottom: .45rem; place-items: center; border-radius: 50%; background: var(--aqua-100); color: var(--teal-700); font-size: 1.1rem; font-style: normal; }
-.activities-disclaimer { display: flex; max-width: 1440px; margin: 0 auto; align-items: center; justify-content: center; gap: .5rem; padding: .65rem 1rem; border: 1px solid var(--line-soft); border-radius: var(--r-sm); color: var(--muted); font-size: .66rem; text-align: center; }
+.activities-disclaimer { display: flex; max-width: 1440px; margin: 0 auto; align-items: center; justify-content: center; gap: .5rem; padding: .65rem 1rem; border: 1px solid var(--line-soft); border-radius: var(--r-sm); color: var(--muted); font-size: .74rem; text-align: center; }
 .activities-disclaimer i { color: var(--teal-600); font-size: 1rem; font-style: normal; }
 
 .explore-view {
@@ -787,7 +793,9 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
   box-shadow: var(--shadow-md);
   transition: transform .4s var(--ease), box-shadow .4s var(--ease);
 }
-.video-frame { width: 100%; aspect-ratio: 16 / 10; background: var(--teal-900); }
+/* The clips are vertical 9:16 reels with captions near the middle; a 3:4 frame
+   shows most of each shot instead of a thin horizontal slice. */
+.video-frame { width: 100%; aspect-ratio: 3 / 4; background: var(--teal-900); }
 .video-frame video { width: 100%; height: 100%; object-fit: cover; background: var(--teal-900); }
 .video-card > div:last-child { padding: 1.1rem 1.25rem 1.25rem; }
 .video-card span { color: var(--aqua-600); font-size: .67rem; font-weight: 700; letter-spacing: .15em; }
@@ -957,10 +965,11 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
   font-size: .84rem;
   font-weight: 700;
   text-decoration: none;
+  white-space: nowrap;
   transition: transform .3s var(--ease), background .3s var(--ease), box-shadow .3s var(--ease);
 }
 .booking-cta:hover { background: linear-gradient(150deg, var(--aqua-600), var(--teal-800)); box-shadow: 0 18px 34px -14px rgba(6, 40, 43, .6); transform: translateY(-2px); }
-.booking-actions { display: flex; flex-wrap: nowrap; align-items: center; gap: .7rem; margin-top: .8rem; }
+.booking-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .7rem; margin-top: .8rem; }
 .booking-actions .booking-cta { margin-top: 0; }
 .booking-contact { display: inline-flex; min-height: 3rem; align-items: center; justify-content: center; gap: .4rem; padding: .68rem 1rem; border: 1px solid var(--teal-600); border-radius: 999px; color: var(--teal-800); font-size: .76rem; font-weight: 700; text-decoration: none; white-space: nowrap; transition: background .25s var(--ease), color .25s var(--ease), transform .25s var(--ease); }
 .booking-contact span { font-size: 1rem; }
@@ -991,6 +1000,9 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 .booking-toolbar > div { display: flex; align-items: center; gap: .6rem; }
 .booking-toolbar-actions { justify-content: flex-end; }
 .booking-toolbar-actions button, .booking-toolbar-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: .45rem .8rem;
   border: 1px solid var(--line);
   border-radius: 999px;
