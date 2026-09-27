@@ -206,6 +206,46 @@ def validate_analytics_beacons() -> list[str]:
     return errors
 
 
+def local_file_for(url: str, page: Path) -> Path | None:
+    """Map a same-site URL to the file GitHub Pages would serve, or None for external URLs."""
+    if url.startswith(ORIGIN):
+        url = url[len(ORIGIN):] or "/"
+    if re.match(r"^(?:[a-z]+:|//|#)", url, re.IGNORECASE):
+        return None
+    path = url.split("#", 1)[0].split("?", 1)[0]
+    if not path:
+        return None
+    target = PUBLIC / path.lstrip("/") if path.startswith("/") else page.parent / path
+    return target / "index.html" if path.endswith("/") else target
+
+
+def validate_local_assets() -> list[str]:
+    """Every same-site image, script, stylesheet and link must exist in public/."""
+    errors: list[str] = []
+    attribute = re.compile(r'\b(src|href|poster|srcset|content)="([^"]+)"')
+    for page in sorted(PUBLIC.rglob("*.html")):
+        for name, value in attribute.findall(page.read_text(encoding="utf-8")):
+            if name == "content" and not re.match(re.escape(ORIGIN) + r"/\S+\.\w+$", value):
+                continue
+            urls = [candidate.strip().split(" ")[0] for candidate in value.split(",")] if name == "srcset" else [value]
+            for url in urls:
+                target = local_file_for(url, page)
+                if target is not None and not target.is_file():
+                    errors.append(f"{page.relative_to(PUBLIC)}: missing local file for {url}")
+
+    # main.js builds gallery paths from its photo list rather than from HTML.
+    media = PUBLIC / "assets" / "media"
+    script = (PUBLIC / "assets/js/main.js").read_text(encoding="utf-8")
+    for file in re.findall(r'\{ file: "([^"]+)"', script):
+        stem = Path(file).stem
+        expected = [media / "gallery" / file, media / "enhanced" / f"{stem}.webp", media / "thumbs" / f"{stem}.webp"]
+        expected += [media / "responsive" / f"{stem}-{width}.webp" for width in (480, 800, 1200, 1600)]
+        for path in expected:
+            if not path.is_file():
+                errors.append(f"assets/js/main.js: gallery photo {file} is missing {path.relative_to(PUBLIC)}")
+    return errors
+
+
 def main() -> int:
     errors = []
     for pair in PAGE_PAIRS:
@@ -213,6 +253,7 @@ def main() -> int:
     errors.extend(validate_sitemap())
     errors.extend(validate_booking_analytics())
     errors.extend(validate_analytics_beacons())
+    errors.extend(validate_local_assets())
     if errors:
         print("Bilingual site validation failed:")
         for error in errors:

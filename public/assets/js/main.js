@@ -225,6 +225,15 @@ function webpPath(file) {
   return "/assets/media/enhanced/" + file.replace(/\.(jpe?g)$/i, ".webp");
 }
 
+/* The gallery stage picks a size from these; the lightbox keeps the full 2400px
+   webpPath() file so zooming stays sharp. */
+function responsiveSrcset(file) {
+  const name = file.replace(/\.(jpe?g)$/i, "");
+  return [480, 800, 1200, 1600].map(function (width) {
+    return "/assets/media/responsive/" + name + "-" + width + ".webp " + width + "w";
+  }).concat(webpPath(file) + " 2400w").join(", ");
+}
+
 function originalPath(file) {
   return "/assets/media/gallery/" + file;
 }
@@ -475,7 +484,7 @@ function updateGallery(index, moveThumbnail) {
   if (!filteredIndexes.includes(index)) index = filteredIndexes[0];
   currentIndex = index;
   const photo = photos[currentIndex];
-  gallerySource.srcset = webpPath(photo.file);
+  gallerySource.srcset = responsiveSrcset(photo.file);
   galleryImage.src = originalPath(photo.file);
   galleryImage.alt = photo.label;
   galleryCategory.textContent = photo.categoryLabel;
