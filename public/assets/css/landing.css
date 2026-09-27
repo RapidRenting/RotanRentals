@@ -29,7 +29,7 @@
 .landing-section.is-dark { background: linear-gradient(145deg, var(--teal-900), #0a4244); color: var(--white); }
 .landing-section.is-white { background: var(--sand-50); }
 .landing-intro { display: grid; grid-template-columns: minmax(18rem, .72fr) minmax(0, 1.28fr); gap: clamp(2rem, 7vw, 7rem); align-items: start; }
-.landing-intro h2, .landing-feature-copy h2, .landing-cta h2 { margin: 0; font-family: var(--serif); font-size: clamp(2.6rem, 4.3vw, 4.7rem); font-weight: 500; letter-spacing: -.045em; line-height: .97; }
+.landing-intro h2, .landing-feature-copy h2, .landing-cta h2, .landing-cta h1 { margin: 0; font-family: var(--serif); font-size: clamp(2.6rem, 4.3vw, 4.7rem); font-weight: 500; letter-spacing: -.045em; line-height: .97; }
 .landing-intro-copy { color: var(--muted); font-size: 1.02rem; }
 .landing-intro-copy p:first-child { margin-top: 0; }
 .landing-intro-copy p:last-child { margin-bottom: 0; }
@@ -61,6 +61,8 @@
 .landing-cta { padding: clamp(4rem, 7vw, 6.5rem) 1.5rem; background: var(--sand-200); text-align: center; }
 .landing-cta p { max-width: 42rem; margin: 1.1rem auto 0; color: var(--muted); }
 .landing-cta .landing-actions { justify-content: center; }
+.landing-cta h1 { color: var(--teal-900); }
+.not-found-alternate { border-top: 1px solid var(--line); background: var(--sand-100); }
 
 .guide-links { padding: 1.15rem clamp(1rem, 3vw, 2.5rem); border-top: 1px solid var(--line-soft); background: var(--sand-50); }
 .guide-links-inner { display: flex; width: min(1260px, 100%); margin: 0 auto; align-items: center; justify-content: center; flex-wrap: wrap; gap: .6rem 1.4rem; color: var(--muted); font-size: .74rem; }

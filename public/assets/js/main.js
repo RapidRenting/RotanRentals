@@ -242,6 +242,30 @@ function thumbPath(file) {
   return "/assets/media/thumbs/" + file.replace(/\.(jpe?g)$/i, ".webp");
 }
 
+/* Only the Activities and Pristine Bay sections show maps, so Leaflet loads the
+   first time one of them opens. If it cannot load, each map keeps its Google
+   Maps fallback link. The integrity hash pins the exact Leaflet 1.9.4 file. */
+let leafletRequest = null;
+function loadLeaflet() {
+  if (window.L) return Promise.resolve();
+  if (!leafletRequest) {
+    leafletRequest = new Promise(function (resolve, reject) {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js";
+      script.integrity = "sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=";
+      script.crossOrigin = "anonymous";
+      script.onload = resolve;
+      script.onerror = function () {
+        leafletRequest = null;
+        script.remove();
+        reject(new Error("Leaflet failed to load"));
+      };
+      document.head.appendChild(script);
+    });
+  }
+  return leafletRequest;
+}
+
 /* OpenStreetMap's own tiles need no API key or account; its tile usage policy
    asks for the attribution below, which Leaflet shows on the map. */
 function addBaseTiles(map) {
@@ -426,16 +450,16 @@ function setRoute(route, updateHistory) {
   if (safeRoute === "gallery") updateGallery(currentIndex, false);
   if (safeRoute === "book") fitBookingCalendar();
   if (safeRoute === "activities") {
-    window.setTimeout(function () {
+    loadLeaflet().then(function () {
       initializeActivitiesMap();
       if (activitiesMap) activitiesMap.invalidateSize();
-    }, 0);
+    }, function () {});
   }
   if (safeRoute === "explore") {
-    window.setTimeout(function () {
+    loadLeaflet().then(function () {
       initializePristineBayMap();
       if (pristineBayMap) pristineBayMap.invalidateSize();
-    }, 0);
+    }, function () {});
   }
 }
 
