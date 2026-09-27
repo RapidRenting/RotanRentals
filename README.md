@@ -18,6 +18,19 @@ After the workflow completes the site will be available at:
 - `public/assets/css/style.css` — site styles
 - `public/assets/js/main.js` — tiny JS
 - `public/assets/media/` — photos and video
+  - `enhanced/` — full-size 2400px WebP photos (also used by the full-screen gallery zoom)
+  - `responsive/` — 480/800/1200/1600px copies offered through `srcset`
+  - `og/` — 1200×630 JPEG link-preview images (keep each under ~300 KB so WhatsApp shows them)
+
+## Photos
+
+After adding or replacing a photo in `gallery/`/`enhanced/` (or `activities/`), create its smaller copies and commit them:
+
+```bash
+python tools/build_responsive_images.py
+```
+
+`tools/validate_i18n.py` fails if any page, or the gallery list in `main.js`, points at an image or file that does not exist.
 
 ## English and Spanish pages
 

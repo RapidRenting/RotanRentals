@@ -722,7 +722,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 .activity-category em { align-self: end; padding: .55rem .65rem .65rem; color: var(--teal-700); font-size: .62rem; font-style: normal; font-weight: 700; }
 .activities-map-card { display: grid; max-width: 1440px; min-height: 27rem; margin: 0 auto 1rem; overflow: hidden; grid-template-columns: minmax(0, 1.35fr) minmax(25rem, .65fr); border-radius: var(--r-lg); box-shadow: var(--shadow-md); }
 .activities-map { min-height: 27rem; background: #dce8df; }
-.activities-map .leaflet-tile-pane { filter: saturate(.75) contrast(.94); }
+.activities-map .leaflet-tile-pane { filter: saturate(.6) contrast(.92) brightness(1.03); }
 .nearby-panel { padding: 1.1rem 1.5rem; background: radial-gradient(80% 100% at 100% 0%, rgba(43, 163, 154, .25), transparent 65%), var(--teal-900); color: var(--white); }
 .nearby-list { margin-top: .55rem; border-top: 1px solid rgba(255,255,255,.14); }
 .nearby-list a { display: grid; min-height: 2.55rem; grid-template-columns: 1.8rem minmax(0, 1fr) 5.3rem auto; align-items: center; gap: .7rem; border-bottom: 1px solid rgba(255,255,255,.14); color: var(--white); text-decoration: none; transition: background .25s var(--ease), transform .25s var(--ease); }
@@ -860,7 +860,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 .location-map { z-index: 0; height: 100%; min-height: 32rem; background: #dce5de; }
 .map-fallback { display: grid; min-height: inherit; margin: 0; place-items: center; padding: 2rem; text-align: center; }
 .map-fallback a { color: var(--teal-800); font-weight: 700; text-decoration: underline; }
-.location-map .leaflet-tile-pane { filter: saturate(.82) contrast(.95); }
+.location-map .leaflet-tile-pane { filter: saturate(.65) contrast(.93) brightness(1.03); }
 .location-map .leaflet-control-attribution { font: 500 .57rem var(--sans); }
 .map-pin {
   display: grid;

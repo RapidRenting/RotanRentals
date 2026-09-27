@@ -208,7 +208,6 @@ $homePage.Add('href="/roatan-golf-and-diving/"', 'href="/es/roatan-golf-and-divi
 $homePage.Add('href="/villa-and-amenities/"', 'href="/es/villa-and-amenities/"')
 $homePage.Add('href="assets/', 'href="/assets/')
 $homePage.Add('src="assets/', 'src="/assets/')
-$homePage.Add('srcset="assets/', 'srcset="/assets/')
 $homePage.Add('poster="assets/', 'poster="/assets/')
 $homePage.Add('aria-label="Full-screen property gallery"', 'aria-label="Galería de la propiedad en pantalla completa"')
 $homePage.Add('aria-label="Close full-screen gallery"', 'aria-label="Cerrar galería de pantalla completa"')

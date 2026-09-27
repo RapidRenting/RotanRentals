@@ -225,12 +225,30 @@ function webpPath(file) {
   return "/assets/media/enhanced/" + file.replace(/\.(jpe?g)$/i, ".webp");
 }
 
+/* The gallery stage picks a size from these; the lightbox keeps the full 2400px
+   webpPath() file so zooming stays sharp. */
+function responsiveSrcset(file) {
+  const name = file.replace(/\.(jpe?g)$/i, "");
+  return [480, 800, 1200, 1600].map(function (width) {
+    return "/assets/media/responsive/" + name + "-" + width + ".webp " + width + "w";
+  }).concat(webpPath(file) + " 2400w").join(", ");
+}
+
 function originalPath(file) {
   return "/assets/media/gallery/" + file;
 }
 
 function thumbPath(file) {
   return "/assets/media/thumbs/" + file.replace(/\.(jpe?g)$/i, ".webp");
+}
+
+/* OpenStreetMap's own tiles need no API key or account; its tile usage policy
+   asks for the attribution below, which Leaflet shows on the map. */
+function addBaseTiles(map) {
+  window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
 }
 
 function setActiveMapLocation(locationId, moveMap) {
@@ -263,11 +281,7 @@ function initializePristineBayMap() {
     scrollWheelZoom: false,
     tap: true
   });
-  window.L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-    subdomains: "abcd",
-    maxZoom: 20,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-  }).addTo(pristineBayMap);
+  addBaseTiles(pristineBayMap);
 
   pristineBayLocations.forEach(function (location) {
     const icon = window.L.divIcon({
@@ -330,11 +344,7 @@ function initializeActivitiesMap() {
 
   mapElement.innerHTML = "";
   activitiesMap = window.L.map(mapElement, { scrollWheelZoom: false, tap: true });
-  window.L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-    subdomains: "abcd",
-    maxZoom: 20,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-  }).addTo(activitiesMap);
+  addBaseTiles(activitiesMap);
 
   activityLocations.forEach(function (location) {
     const icon = window.L.divIcon({
@@ -475,7 +485,7 @@ function updateGallery(index, moveThumbnail) {
   if (!filteredIndexes.includes(index)) index = filteredIndexes[0];
   currentIndex = index;
   const photo = photos[currentIndex];
-  gallerySource.srcset = webpPath(photo.file);
+  gallerySource.srcset = responsiveSrcset(photo.file);
   galleryImage.src = originalPath(photo.file);
   galleryImage.alt = photo.label;
   galleryCategory.textContent = photo.categoryLabel;
