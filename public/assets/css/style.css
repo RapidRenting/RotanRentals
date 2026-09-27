@@ -325,6 +325,8 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
   background: transparent;
   cursor: pointer;
 }
+/* Section headings receive focus from main.js on navigation; they are not controls. */
+[data-view] :is(h1, h2)[tabindex="-1"]:focus { outline: none; }
 .home-photo-link:focus-visible { outline: 3px solid var(--coral-500); outline-offset: -6px; }
 .photo-credit {
   position: absolute;

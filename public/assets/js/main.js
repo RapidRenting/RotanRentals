@@ -427,8 +427,24 @@ function fitBookingCalendar() {
   frame.style.setProperty("--cal-frame-h", Math.round(CALENDAR_HEIGHT * scale) + "px");
 }
 
-function setRoute(route, updateHistory) {
+const homeTitle = document.title;
+const routeTitles = isSpanish
+  ? { gallery: "Galería de fotos", activities: "Actividades", explore: "Pristine Bay", book: "Disponibilidad" }
+  : { gallery: "Photo gallery", activities: "Activities", explore: "Pristine Bay", book: "Availability" };
+
+/* After a visitor switches section, move focus to its heading so keyboard and
+   screen-reader users land on (and hear) the new content. */
+function focusRouteHeading(route) {
+  const view = views.find(function (item) { return item.dataset.view === route; });
+  const heading = view && view.querySelector("h1, h2");
+  if (!heading) return;
+  heading.setAttribute("tabindex", "-1");
+  heading.focus({ preventScroll: true });
+}
+
+function setRoute(route, updateHistory, moveFocus) {
   const safeRoute = routeNames.includes(route) ? route : "home";
+  document.title = routeTitles[safeRoute] ? routeTitles[safeRoute] + " | 1111 Pearl Court, Pristine Bay" : homeTitle;
   views.forEach(function (view) {
     const active = view.dataset.view === safeRoute;
     view.hidden = !active;
@@ -447,6 +463,7 @@ function setRoute(route, updateHistory) {
     trackSiteEvent("section-" + safeRoute);
   }
   window.scrollTo({ top: 0, behavior: "instant" });
+  if (moveFocus) focusRouteHeading(safeRoute);
   if (safeRoute === "gallery") updateGallery(currentIndex, false);
   if (safeRoute === "book") fitBookingCalendar();
   if (safeRoute === "activities") {
@@ -465,8 +482,12 @@ function setRoute(route, updateHistory) {
 
 routeButtons.forEach(function (button) {
   button.addEventListener("click", function (event) {
-    if (button.tagName === "A") event.preventDefault();
-    setRoute(button.dataset.route, true);
+    if (button.tagName === "A") {
+      // Let Ctrl/Cmd/Shift-click open the section in a new tab or window.
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+    }
+    setRoute(button.dataset.route, true, true);
     if (button.dataset.galleryFilter) applyFilter(button.dataset.galleryFilter);
   });
 });
@@ -489,7 +510,7 @@ menuButton.addEventListener("click", function () {
 });
 
 window.addEventListener("popstate", function () {
-  setRoute(location.hash.slice(1), false);
+  setRoute(location.hash.slice(1), false, true);
 });
 
 function renderThumbnails() {
@@ -623,8 +644,17 @@ function pointerDistance(pointerValues) {
   return Math.hypot(second.x - first.x, second.y - first.y);
 }
 
+/* While the full-screen gallery is open, the page behind it is inert so keyboard
+   and screen-reader focus cannot wander there. */
+function setPageBehindLightboxInert(inert) {
+  Array.from(document.body.children).forEach(function (element) {
+    if (element !== lightbox && element.tagName !== "SCRIPT") element.inert = inert;
+  });
+}
+
 function openLightbox() {
   lastFocusedElement = document.activeElement;
+  setPageBehindLightboxInert(true);
   updateLightbox();
   lightbox.classList.add("open");
   lightbox.setAttribute("aria-hidden", "false");
@@ -637,6 +667,7 @@ function closeLightbox() {
   lightbox.classList.remove("open");
   lightbox.setAttribute("aria-hidden", "true");
   document.body.classList.remove("lightbox-open");
+  setPageBehindLightboxInert(false);
   resetLightboxZoom(false);
   lightboxImage.src = "";
   lightboxSource.srcset = "";
@@ -761,13 +792,33 @@ galleryStage.addEventListener("pointercancel", function () {
   pointerId = null;
 });
 
+function trapLightboxFocus(event) {
+  const controls = Array.from(lightbox.querySelectorAll("button")).filter(function (control) {
+    return control.offsetParent !== null;
+  });
+  if (!controls.length) return;
+  const first = controls[0];
+  const last = controls[controls.length - 1];
+  if (event.shiftKey && (document.activeElement === first || !lightbox.contains(document.activeElement))) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && (document.activeElement === last || !lightbox.contains(document.activeElement))) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
 document.addEventListener("keydown", function (event) {
   if (lightbox.classList.contains("open")) {
     if (event.key === "Escape") closeLightbox();
+    if (event.key === "Tab") trapLightboxFocus(event);
     if (event.key === "ArrowLeft") moveGallery(-1);
     if (event.key === "ArrowRight") moveGallery(1);
     return;
   }
+  // Leave arrow keys to form controls such as the photo filter dropdown.
+  if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  if (event.target.closest && event.target.closest("input, select, textarea, [contenteditable]")) return;
   if (!document.getElementById("galleryView").hidden) {
     if (event.key === "ArrowLeft") moveGallery(-1);
     if (event.key === "ArrowRight") moveGallery(1);
