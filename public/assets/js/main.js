@@ -275,6 +275,48 @@ function addBaseTiles(map) {
   }).addTo(map);
 }
 
+/* Pins are 40px wide, so nearby places (the golf course, Scuba Shop and Beach
+   Club) stack on top of each other at island-wide zoom. After each zoom, nudge
+   overlapping pins apart just enough to read them; zoomed in, every pin sits on
+   its real location again. */
+const PIN_GAP = 36;
+function pinIcon(location, className, offset) {
+  return window.L.divIcon({
+    className: className,
+    html: '<span class="map-pin-shape"><b>' + location.number + "</b></span>",
+    iconSize: [40, 40],
+    iconAnchor: [20 - offset.x, 20 - offset.y],
+    popupAnchor: [offset.x, offset.y - 22]
+  });
+}
+
+function spreadPins(map, locations, markers, className) {
+  const points = locations.map(function (location) { return map.latLngToLayerPoint(location.coordinates); });
+  const offsets = points.map(function () { return { x: 0, y: 0 }; });
+  for (let pass = 0; pass < 40; pass++) {
+    let moved = false;
+    for (let i = 0; i < points.length; i++) {
+      for (let j = i + 1; j < points.length; j++) {
+        const dx = (points[j].x + offsets[j].x) - (points[i].x + offsets[i].x);
+        const dy = (points[j].y + offsets[j].y) - (points[i].y + offsets[i].y);
+        const distance = Math.hypot(dx, dy);
+        if (distance >= PIN_GAP) continue;
+        const push = (PIN_GAP - distance) / 2 + .5;
+        const ux = distance ? dx / distance : 1;
+        const uy = distance ? dy / distance : 0;
+        offsets[i].x -= ux * push; offsets[i].y -= uy * push;
+        offsets[j].x += ux * push; offsets[j].y += uy * push;
+        moved = true;
+      }
+    }
+    if (!moved) break;
+  }
+  locations.forEach(function (location, index) {
+    const offset = { x: Math.round(offsets[index].x), y: Math.round(offsets[index].y) };
+    markers[location.id].setIcon(pinIcon(location, className(location), offset));
+  });
+}
+
 function setActiveMapLocation(locationId, moveMap) {
   document.querySelectorAll(".map-location-link").forEach(function (link) {
     link.classList.toggle("is-active", link.dataset.mapLocation === locationId);
@@ -308,13 +350,7 @@ function initializePristineBayMap() {
   addBaseTiles(pristineBayMap);
 
   pristineBayLocations.forEach(function (location) {
-    const icon = window.L.divIcon({
-      className: "map-pin",
-      html: '<span class="map-pin-shape"><b>' + location.number + "</b></span>",
-      iconSize: [40, 40],
-      iconAnchor: [20, 20],
-      popupAnchor: [0, -22]
-    });
+    const icon = pinIcon(location, "map-pin", { x: 0, y: 0 });
     const marker = window.L.marker(location.coordinates, {
       icon: icon,
       keyboard: true,
@@ -332,6 +368,9 @@ function initializePristineBayMap() {
 
   const bounds = window.L.latLngBounds(pristineBayLocations.map(function (location) { return location.coordinates; }));
   pristineBayMap.fitBounds(bounds, { padding: [28, 28], maxZoom: 15 });
+  const pristinePinClass = function () { return "map-pin"; };
+  spreadPins(pristineBayMap, pristineBayLocations, pristineBayMarkers, pristinePinClass);
+  pristineBayMap.on("zoomend", function () { spreadPins(pristineBayMap, pristineBayLocations, pristineBayMarkers, pristinePinClass); });
 
   document.querySelectorAll(".map-location-link").forEach(function (link) {
     link.addEventListener("mouseenter", function () { setActiveMapLocation(link.dataset.mapLocation, true); });
@@ -358,6 +397,10 @@ function setActiveActivityLocation(locationId, moveMap) {
   }
 }
 
+function activityPinClass(location) {
+  return "map-pin activity-pin activity-pin-" + location.number;
+}
+
 function initializeActivitiesMap() {
   const mapElement = document.getElementById("activitiesMap");
   if (!mapElement || !window.L) return;
@@ -371,11 +414,7 @@ function initializeActivitiesMap() {
   addBaseTiles(activitiesMap);
 
   activityLocations.forEach(function (location) {
-    const icon = window.L.divIcon({
-      className: "map-pin activity-pin activity-pin-" + location.number,
-      html: '<span class="map-pin-shape"><b>' + location.number + "</b></span>",
-      iconSize: [40, 40], iconAnchor: [20, 20], popupAnchor: [0, -22]
-    });
+    const icon = pinIcon(location, activityPinClass(location), { x: 0, y: 0 });
     const marker = window.L.marker(location.coordinates, { icon: icon, keyboard: true, title: location.label }).addTo(activitiesMap);
     marker.bindPopup("<strong>" + location.label + "</strong><br>" + location.detail);
     marker.on("mouseover", function () { setActiveActivityLocation(location.id, false); });
@@ -385,6 +424,8 @@ function initializeActivitiesMap() {
   });
 
   activitiesMap.fitBounds(window.L.latLngBounds(activityLocations.map(function (location) { return location.coordinates; })), { padding: [34, 34], maxZoom: 11 });
+  spreadPins(activitiesMap, activityLocations, activityMarkers, activityPinClass);
+  activitiesMap.on("zoomend", function () { spreadPins(activitiesMap, activityLocations, activityMarkers, activityPinClass); });
   document.querySelectorAll(".activity-map-link").forEach(function (link) {
     link.addEventListener("mouseenter", function () { setActiveActivityLocation(link.dataset.activityLocation, true); });
     link.addEventListener("mouseleave", function () { setActiveActivityLocation(null, false); });
@@ -830,6 +871,15 @@ const bookingIframe = document.querySelector("#bookingCalendar iframe");
 bookingIframe.addEventListener("load", function () {
   document.getElementById("bookingCalendar").classList.add("is-loaded");
 });
+document.querySelectorAll("[data-scroll-target]").forEach(function (button) {
+  button.addEventListener("click", function () {
+    const target = document.getElementById(button.dataset.scrollTarget);
+    if (!target) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  });
+});
+
 document.getElementById("bookingReset").addEventListener("click", function () {
   const resetButton = this;
   document.getElementById("bookingCalendar").classList.remove("is-loaded");
