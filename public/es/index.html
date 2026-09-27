@@ -92,8 +92,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=ac_unit,balcony,bathtub,beach_access,bed,calendar_month,checkroom,directions_car,family_restroom,golf_course,groups,info,king_bed,kitchen,language,local_laundry_service,location_on,lock,lunch_dining,mail,person,photo_camera,pool,restaurant,schedule,scuba_diving,shopping_bag,shower,sports_bar,sunny,waves,wb_sunny,wifi&display=block" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/style.css?v=20260927d" />
-  <link rel="stylesheet" href="/assets/css/landing.css?v=20260927a" />
+  <link rel="stylesheet" href="/assets/css/style.css?v=20260927e" />
+  <link rel="stylesheet" href="/assets/css/landing.css?v=20260927c" />
   <script src="/assets/js/language.js?v=20260927a"></script>
 </head>
 <body>
@@ -113,7 +113,7 @@
         <a class="nav-button route-button" href="#gallery" data-route="gallery">Galería</a>
         <a class="nav-button route-button" href="#activities" data-route="activities">Actividades</a>
         <a class="nav-button route-button" href="#explore" data-route="explore">Pristine Bay</a>
-        <a class="language-toggle" href="/" hreflang="en" lang="en" data-language-switch="en" aria-label="Ver esta página en inglés"><i translate="no" class="material-symbols-rounded" aria-hidden="true">language</i><span>English</span></a>
+        <a class="language-toggle" href="/" hreflang="en" lang="en" data-language-switch="en" aria-label="Ver esta página en inglés"><i translate="no" class="material-symbols-rounded" aria-hidden="true">language</i><span class="lang-option" aria-hidden="true">EN</span><span class="lang-option is-current" aria-hidden="true">ES</span></a>
         <a class="btn btn-book route-button" href="#book" data-route="book">Disponibilidad</a>
       </div>
     </nav>
@@ -318,7 +318,7 @@
               Su navegador no permite reproducir este video.
             </video>
           </div>
-          <div><span>00:30</span><button class="video-fullscreen" type="button" data-video="0">Pantalla completa</button><strong>Sumérjase en Roatán</strong><p>Costa, agua turquesa y el lado aventurero de la isla.</p></div>
+          <div><span>00:30</span><button class="video-fullscreen" type="button" data-video="0">Pantalla completa</button><strong>Un día en Pristine Bay</strong><p>Tenis, el Beach Club privado y los campos de Black Pearl, todo dentro de la comunidad.</p></div>
         </article>
         <article class="video-card">
           <div class="video-frame">
@@ -353,6 +353,7 @@
       <aside class="book-intro">
         <p class="eyebrow">Planifique su estadía</p>
         <h2>Consulte disponibilidad.</h2>
+        <button class="calendar-jump" type="button" data-scroll-target="bookingShell">Ir al calendario <span aria-hidden="true">↓</span></button>
         <p>Seleccione sus fechas para ver disponibilidad, tarifas, políticas, opciones de pago y más. Roatán Property Management gestiona de forma segura todos los detalles, las fechas y el seguimiento de la reservación.</p>
         <div class="booking-actions"><a class="booking-cta" href="https://www.lodgix.com/23844/?rental_property=82207" target="_blank" rel="noopener noreferrer">Abrir página completa de reservación <span aria-hidden="true">↗</span></a><a class="booking-contact" href="https://www.roatanpropertymanagement.com/contact.htm" target="_blank" rel="noopener noreferrer">Contactar a la administración <span translate="no" class="material-symbols-rounded" aria-hidden="true">mail</span></a></div>
         <div class="booking-note">
@@ -361,7 +362,7 @@
           <a href="https://www.roatanpropertymanagement.com/pristine-bay-townhouse/" target="_blank" rel="noopener noreferrer">Revisar detalles de la administración&nbsp;↗</a>
         </div>
       </aside>
-      <div class="booking-shell">
+      <div class="booking-shell" id="bookingShell">
         <div class="booking-toolbar">
           <div><span class="status-dot" aria-hidden="true"></span><strong>Disponibilidad en vivo</strong></div>
           <div class="booking-toolbar-actions">
@@ -425,6 +426,6 @@
   </div>
 
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"dbda8af15e39403cb84db871c0b8263f"}'></script>
-  <script src="/assets/js/main.js?v=20260927c"></script>
+  <script src="/assets/js/main.js?v=20260927d"></script>
 </body>
 </html>

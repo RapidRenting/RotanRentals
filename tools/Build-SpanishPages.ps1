@@ -40,7 +40,7 @@ $shared = [ordered]@{
   '>Roatán golf and diving</a>' = '>Golf y buceo en Roatán</a>'
   '>Villa and amenities</a>' = '>Villa y comodidades</a>'
   '<span>Contact them for more information, booking follow-up, payment, and scheduling.</span>' = '<span>Contáctelos para más información y para dar seguimiento a su reservación, pago y fechas.</span>'
-  'data-language-switch="es" aria-label="Ver esta página en español"><i translate="no" class="material-symbols-rounded" aria-hidden="true">language</i><span>Español</span></a>' = 'data-language-switch="en" aria-label="Ver esta página en inglés"><i translate="no" class="material-symbols-rounded" aria-hidden="true">language</i><span>English</span></a>'
+  'data-language-switch="es" aria-label="Ver esta página en español"><i translate="no" class="material-symbols-rounded" aria-hidden="true">language</i><span class="lang-option is-current" aria-hidden="true">EN</span><span class="lang-option" aria-hidden="true">ES</span></a>' = 'data-language-switch="en" aria-label="Ver esta página en inglés"><i translate="no" class="material-symbols-rounded" aria-hidden="true">language</i><span class="lang-option" aria-hidden="true">EN</span><span class="lang-option is-current" aria-hidden="true">ES</span></a>'
 }
 
 $homePage = [ordered]@{}
@@ -176,7 +176,7 @@ $homePage.Add('>Diving &amp; shoreline</span>', '>Buceo y costa</span>')
 $homePage.Add('>Relaxed island living</span>', '>Vida isleña relajada</span>')
 $homePage.Add('Your browser does not support embedded video.', 'Su navegador no permite reproducir este video.')
 $homePage.Add('>Full screen</button>', '>Pantalla completa</button>')
-$homePage.Add("<strong>Dive into Roatán</strong><p>Coastline, turquoise water, and the island’s adventurous side.</p>", '<strong>Sumérjase en Roatán</strong><p>Costa, agua turquesa y el lado aventurero de la isla.</p>')
+$homePage.Add("<strong>A day in Pristine Bay</strong><p>Tennis, the private Beach Club and the Black Pearl fairways, all inside the community.</p>", '<strong>Un día en Pristine Bay</strong><p>Tenis, el Beach Club privado y los campos de Black Pearl, todo dentro de la comunidad.</p>')
 $homePage.Add('<strong>Arrive, then explore</strong><p>A quick look at getting here and the experiences waiting nearby.</p>', '<strong>Llegue y empiece a explorar</strong><p>Un vistazo rápido a cómo llegar y a las experiencias cercanas.</p>')
 $homePage.Add('aria-label="Interactive map of the villa and nearby Pristine Bay amenities"', 'aria-label="Mapa interactivo de la villa y amenidades cercanas en Pristine Bay"')
 $homePage.Add('>Open 1111 Pearl Court in Google Maps&nbsp;↗</a>', '>Abrir 1111 Pearl Court en Google Maps&nbsp;↗</a>')
@@ -192,6 +192,7 @@ $homePage.Add('<em>Directions&nbsp;↗</em>', '<em>Cómo llegar&nbsp;↗</em>')
 $homePage.Add('Amenity access, hours, and fees may vary. Confirm current arrangements with the property manager.', 'El acceso a las amenidades, los horarios y las tarifas pueden variar. Confirme las condiciones vigentes con la administración de la propiedad.')
 $homePage.Add('Plan your stay', 'Planifique su estadía')
 $homePage.Add('Check availability.', 'Consulte disponibilidad.')
+$homePage.Add('>Jump to the calendar <span aria-hidden="true">↓</span></button>', '>Ir al calendario <span aria-hidden="true">↓</span></button>')
 $homePage.Add('Select your dates to view live availability, rates, policies, payment options, and more. All booking details, scheduling, and follow-up are securely managed by Roatán Property Management.', 'Seleccione sus fechas para ver disponibilidad, tarifas, políticas, opciones de pago y más. Roatán Property Management gestiona de forma segura todos los detalles, las fechas y el seguimiento de la reservación.')
 $homePage.Add('Open full booking page', 'Abrir página completa de reservación')
 $homePage.Add('Contact the manager', 'Contactar a la administración')
