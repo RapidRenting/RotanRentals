@@ -185,12 +185,34 @@ def validate_booking_analytics() -> list[str]:
     return errors
 
 
+def validate_analytics_beacons() -> list[str]:
+    """The dashboard site tag is not the JS snippet installation token."""
+    errors: list[str] = []
+    installation_token = "dbda8af15e39403cb84db871c0b8263f"
+    pages = [PUBLIC / item for pair in PAGE_PAIRS for item in pair[:2]]
+    pages.extend((PUBLIC / "analytics-events").glob("*/index.html"))
+    for path in pages:
+        html = path.read_text(encoding="utf-8")
+        snippets = re.findall(r'data-cf-beacon=\'([^\']+)\'', html)
+        if len(snippets) != 1:
+            errors.append(f"{path.relative_to(PUBLIC)}: expected one analytics beacon")
+            continue
+        try:
+            token = json.loads(snippets[0]).get("token")
+        except (ValueError, AttributeError):
+            token = None
+        if token != installation_token:
+            errors.append(f"{path.relative_to(PUBLIC)}: incorrect analytics installation token")
+    return errors
+
+
 def main() -> int:
     errors = []
     for pair in PAGE_PAIRS:
         errors.extend(validate_page_pair(*pair))
     errors.extend(validate_sitemap())
     errors.extend(validate_booking_analytics())
+    errors.extend(validate_analytics_beacons())
     if errors:
         print("Bilingual site validation failed:")
         for error in errors:
