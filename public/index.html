@@ -31,6 +31,7 @@
   {
     "@context": "https://schema.org",
     "@type": "VacationRental",
+    "additionalType": "Villa",
     "@id": "https://staypristinebay.com/#vacation-rental",
     "identifier": "stay-pristine-bay-1111-pearl-court",
     "name": "1111 Pearl Court",
@@ -57,25 +58,27 @@
     "longitude": -86.464218,
     "containsPlace": {
       "@type": "Accommodation",
+      "additionalType": "EntirePlace",
       "occupancy": {
         "@type": "QuantitativeValue",
         "value": 4
       },
       "numberOfBedrooms": 2,
-      "numberOfBathroomsTotal": 3,
-      "numberOfFullBathrooms": 2,
-      "numberOfPartialBathrooms": 1,
+      "numberOfBathroomsTotal": 2.5,
       "bed": [
         { "@type": "BedDetails", "numberOfBeds": 1, "typeOfBed": "King" },
         { "@type": "BedDetails", "numberOfBeds": 1, "typeOfBed": "King" }
       ],
       "amenityFeature": [
-        { "@type": "LocationFeatureSpecification", "name": "Private infinity pool", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Gated community", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Wi-Fi", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Air conditioning", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Full kitchen", "value": true },
-        { "@type": "LocationFeatureSpecification", "name": "Laundry", "value": true }
+        { "@type": "LocationFeatureSpecification", "name": "pool", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "poolType", "value": "Outdoor" },
+        { "@type": "LocationFeatureSpecification", "name": "wifi", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "ac", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "kitchen", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "washerDryer", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "tv", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "balcony", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "patio", "value": true }
       ]
     },
     "potentialAction": {

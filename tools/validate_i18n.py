@@ -268,6 +268,45 @@ def validate_icon_font() -> list[str]:
     return errors
 
 
+# Google's documented vacation-rental values; amenity names must stay in English
+# on every language version.
+GOOGLE_RENTAL_TYPES = {"Apartment", "Bungalow", "Cabin", "Chalet", "Cottage", "Gite", "HolidayVillageRental", "House", "Villa", "VacationRental"}
+GOOGLE_PLACE_TYPES = {"EntirePlace", "PrivateRoom", "SharedRoom"}
+GOOGLE_AMENITIES = {
+    "ac", "airportShuttle", "balcony", "beachAccess", "childFriendly", "crib", "elevator", "fireplace",
+    "freeBreakfast", "gymFitnessEquipment", "heating", "hotTub", "instantBookable", "ironingBoard", "kitchen",
+    "microwave", "outdoorGrill", "ovenStove", "patio", "petsAllowed", "pool", "privateBeachAccess",
+    "selfCheckinCheckout", "smokingAllowed", "tv", "washerDryer", "wheelchairAccessible", "wifi",
+    "internetType", "parkingType", "poolType", "licenseNum",
+}
+
+
+def validate_rental_data() -> list[str]:
+    errors: list[str] = []
+    facts = {}
+    for relative in ("index.html", "es/index.html"):
+        html = (PUBLIC / relative).read_text(encoding="utf-8")
+        rentals = [json.loads(block) for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)]
+        rentals = [item for item in rentals if item.get("@type") == "VacationRental"]
+        if len(rentals) != 1:
+            errors.append(f"{relative}: expected one VacationRental block")
+            continue
+        rental = rentals[0]
+        place = rental.get("containsPlace", {})
+        if rental.get("additionalType") not in GOOGLE_RENTAL_TYPES:
+            errors.append(f"{relative}: VacationRental additionalType must be one of Google's listed types")
+        if place.get("additionalType") not in GOOGLE_PLACE_TYPES:
+            errors.append(f"{relative}: containsPlace.additionalType must be EntirePlace, PrivateRoom or SharedRoom")
+        names = [feature.get("name") for feature in place.get("amenityFeature", [])]
+        unknown = sorted(name for name in names if name not in GOOGLE_AMENITIES)
+        if unknown:
+            errors.append(f"{relative}: amenity names not in Google's English list: {', '.join(map(str, unknown))}")
+        facts[relative] = (rental.get("additionalType"), place.get("additionalType"), place.get("numberOfBathroomsTotal"), tuple(names))
+    if len(set(facts.values())) > 1:
+        errors.append("index.html/es/index.html: rental facts differ between English and Spanish")
+    return errors
+
+
 def main() -> int:
     errors = []
     for pair in PAGE_PAIRS:
@@ -277,6 +316,7 @@ def main() -> int:
     errors.extend(validate_analytics_beacons())
     errors.extend(validate_local_assets())
     errors.extend(validate_icon_font())
+    errors.extend(validate_rental_data())
     if errors:
         print("Bilingual site validation failed:")
         for error in errors:
