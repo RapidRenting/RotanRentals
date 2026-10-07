@@ -483,6 +483,29 @@ function focusRouteHeading(route) {
   heading.focus({ preventScroll: true });
 }
 
+/* The Pristine Bay videos sit in a hidden section, but browsers still download
+   a poster image straight away. Attach the posters only when that section opens
+   so they do not compete with the homepage's main photo on slow connections. */
+function showVideoPosters() {
+  document.querySelectorAll("video[data-poster]").forEach(function (video) {
+    video.poster = video.dataset.poster;
+    video.removeAttribute("data-poster");
+  });
+}
+
+/* Below-the-fold homepage photos wait until the main photo has loaded (or four
+   seconds pass) so the first screen gets the full connection. */
+function releaseDeferredImages() {
+  document.querySelectorAll("[data-defer-srcset]").forEach(function (element) {
+    element.setAttribute("srcset", element.dataset.deferSrcset);
+    element.removeAttribute("data-defer-srcset");
+  });
+  document.querySelectorAll("img[data-defer-src]").forEach(function (image) {
+    image.src = image.dataset.deferSrc;
+    image.removeAttribute("data-defer-src");
+  });
+}
+
 function setRoute(route, updateHistory, moveFocus) {
   const safeRoute = routeNames.includes(route) ? route : "home";
   document.title = routeTitles[safeRoute] ? routeTitles[safeRoute] + " | 1111 Pearl Court, Pristine Bay" : homeTitle;
@@ -514,6 +537,7 @@ function setRoute(route, updateHistory, moveFocus) {
     }, function () {});
   }
   if (safeRoute === "explore") {
+    showVideoPosters();
     loadLeaflet().then(function () {
       initializePristineBayMap();
       if (pristineBayMap) pristineBayMap.invalidateSize();
@@ -865,6 +889,15 @@ document.addEventListener("keydown", function (event) {
     if (event.key === "ArrowRight") moveGallery(1);
   }
 });
+
+const heroImage = document.querySelector(".home-photo img");
+if (heroImage && !heroImage.complete) {
+  heroImage.addEventListener("load", releaseDeferredImages, { once: true });
+  heroImage.addEventListener("error", releaseDeferredImages, { once: true });
+  window.setTimeout(releaseDeferredImages, 4000);
+} else {
+  releaseDeferredImages();
+}
 
 const bookingUrl = "https://www.lodgix.com/23844/?rental_property=82207";
 const bookingIframe = document.querySelector("#bookingCalendar iframe");
