@@ -52,7 +52,7 @@ $homePage.Add('<meta property="og:url" content="https://staypristinebay.com/" />
 $homePage.Add('content="1111 Pearl Court · Pristine Bay Roatán Vacation Villa"', 'content="1111 Pearl Court · Villa vacacional en Pristine Bay, Roatán"')
 $homePage.Add('content="Golf, dive, and explore Roatán from a private two-suite villa with an infinity pool inside gated Pristine Bay."', 'content="Disfrute el golf, el buceo y Roatán desde una villa privada para cuatro con piscina infinita dentro de Pristine Bay."')
 $homePage.Add('content="1111 Pearl Court vacation villa and tropical garden in Pristine Bay, Roatán"', 'content="Villa vacacional 1111 Pearl Court y jardín tropical en Pristine Bay, Roatán"')
-$homePage.Add('"url": "https://staypristinebay.com/",', ('"url": "https://staypristinebay.com/es/",' + [Environment]::NewLine + '    "inLanguage": "es-HN",'))
+$homePage.Add('"url": "https://staypristinebay.com/",', '"url": "https://staypristinebay.com/es/",')
 $homePage.Add('"description": "A private two-suite vacation villa with an infinity pool inside the gated Pristine Bay community in Roatán, Honduras, near the Black Pearl Golf Course and scuba diving."', '"description": "Villa vacacional privada para cuatro personas, con dos suites y piscina infinita dentro de la comunidad cerrada Pristine Bay en Roatán, Honduras, cerca del campo de golf Black Pearl y del buceo."')
 $homePage.Add('aria-label="Pristine Bay Villa home"', 'aria-label="Inicio de Villa Pristine Bay"')
 $homePage.Add('href="/es/" hreflang="es" lang="es" data-language-switch="en"', 'href="/" hreflang="en" lang="en" data-language-switch="en"')
