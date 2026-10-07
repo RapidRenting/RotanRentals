@@ -1,0 +1,15 @@
+# Keeps the GitHub Actions in .github/workflows/gh-pages.yml current. The site
+# itself has no package manifest; Leaflet is pinned with an integrity hash in
+# public/assets/js/main.js and is checked by hand during audits.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      deploy-actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "ci"
