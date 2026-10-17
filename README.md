@@ -20,6 +20,7 @@ After the workflow completes the site will be available at:
 - `public/assets/media/` — photos and video
   - `enhanced/` — full-size 2400px WebP photos (also used by the full-screen gallery zoom)
   - `responsive/` — 480/800/1200/1600px copies offered through `srcset`
+  - `thumbs/` — 480px gallery thumbnails plus `-240` copies for 1x screens (also produced by `build_responsive_images.py`)
   - `og/` — 1200×630 JPEG link-preview images (keep each under ~300 KB so WhatsApp shows them)
 
 ## Photos
@@ -31,6 +32,8 @@ python tools/build_responsive_images.py
 ```
 
 `tools/validate_i18n.py` fails if any page, or the gallery list in `main.js`, points at an image or file that does not exist.
+
+Pages load `language.js` before their stylesheets so the Spanish redirect runs immediately; keep that order when editing a page's `<head>`. After changing `style.css`, `landing.css` or a script, bump its `?v=` query string on every page that links it.
 
 ## English and Spanish pages
 

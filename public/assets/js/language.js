@@ -2,13 +2,18 @@
   "use strict";
 
   /* Hide icon ligature text until the icon font is really available. If the font
-     is blocked, the icons simply stay blank rather than showing their names. */
+     is blocked, the icons simply stay blank rather than showing their names.
+     This script runs before the stylesheets, so the @font-face rule is not
+     known yet; ask for the font once the document (and its stylesheets) has
+     finished parsing. */
   var root = document.documentElement;
   if (document.fonts && document.fonts.load) {
     root.classList.add("icons-pending");
-    document.fonts.load('24px "Material Symbols Rounded"', "lock").then(function (faces) {
-      if (faces.length) root.classList.remove("icons-pending");
-    }, function () {});
+    document.addEventListener("DOMContentLoaded", function () {
+      document.fonts.load('24px "Material Symbols Rounded"', "lock").then(function (faces) {
+        if (faces.length) root.classList.remove("icons-pending");
+      }, function () {});
+    });
   }
 }());
 
@@ -30,7 +35,10 @@
     var shouldUseSpanish = savedLanguage === "es" || (!savedLanguage && /^es(?:-|$)/.test(browserLanguage));
 
     if (shouldUseSpanish) {
-      var spanishUrl = new URL(alternate.href, window.location.href);
+      /* Use the alternate's path on the current origin (so previews stay on
+         their own host) and keep the query string and section hash. */
+      var spanishUrl = new URL(new URL(alternate.href, window.location.href).pathname, window.location.href);
+      spanishUrl.search = window.location.search;
       spanishUrl.hash = window.location.hash;
       window.location.replace(spanishUrl.href);
       return;

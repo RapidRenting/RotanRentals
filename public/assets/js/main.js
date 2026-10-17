@@ -161,7 +161,8 @@ if (isSpanish) {
 const routeNames = ["home", "gallery", "activities", "explore", "book"];
 const views = Array.from(document.querySelectorAll("[data-view]"));
 const routeButtons = Array.from(document.querySelectorAll(".route-button"));
-const navButtons = Array.from(document.querySelectorAll(".nav-button"));
+const navButtons = Array.from(document.querySelectorAll(".nav-links .route-button"));
+const languageToggle = document.querySelector(".language-toggle");
 const navLinks = document.getElementById("navLinks");
 const menuButton = document.querySelector(".menu-toggle");
 const galleryImage = document.getElementById("galleryImage");
@@ -183,6 +184,7 @@ const lightboxClose = document.getElementById("lightboxClose");
 const lightboxMedia = document.getElementById("lightboxMedia");
 const lightboxPicture = document.getElementById("lightboxPicture");
 const lightboxZoomLabel = document.getElementById("lightboxZoomLabel");
+let currentRoute = null;
 let currentIndex = 0;
 let activeFilter = "all";
 let filteredIndexes = photos.map(function (_, index) { return index; });
@@ -199,6 +201,7 @@ let lightboxHadPinch = false;
 let lastLightboxTap = 0;
 const lightboxPointers = new Map();
 let pristineBayMap = null;
+let activePristineBayId = null;
 const pristineBayMarkers = {};
 const pristineBayLocations = [
   { id: "villa", number: 1, label: "1111 Pearl Court", detail: isSpanish ? "Villa y piscina privada" : "Villa and private pool", coordinates: [16.373745, -86.464218] },
@@ -207,6 +210,7 @@ const pristineBayLocations = [
   { id: "scuba", number: 4, label: "Pristine Bay Scuba Shop", detail: isSpanish ? "Experiencias y equipo de buceo" : "Dive experiences and equipment", coordinates: [16.3761, -86.4639] }
 ];
 let activitiesMap = null;
+let activeActivityId = null;
 const activityMarkers = {};
 const activityLocations = [
   { id: "golf", number: 1, label: "Black Pearl Golf Course", detail: "Golf", coordinates: [16.3723, -86.458] },
@@ -238,8 +242,11 @@ function originalPath(file) {
   return "/assets/media/gallery/" + file;
 }
 
-function thumbPath(file) {
-  return "/assets/media/thumbs/" + file.replace(/\.(jpe?g)$/i, ".webp");
+/* Thumbnails show at about 7rem wide, so a 240px copy serves 1x screens and the
+   480px copy serves sharper screens, instead of every screen loading 480px. */
+function thumbSrcset(file) {
+  const base = "/assets/media/thumbs/" + file.replace(/\.(jpe?g)$/i, "");
+  return base + "-240.webp 240w, " + base + ".webp 480w";
 }
 
 /* Only the Activities and Pristine Bay sections show maps, so Leaflet loads the
@@ -290,7 +297,7 @@ function pinIcon(location, className, offset) {
   });
 }
 
-function spreadPins(map, locations, markers, className) {
+function spreadPins(map, locations, markers, className, activeId) {
   const points = locations.map(function (location) { return map.latLngToLayerPoint(location.coordinates); });
   const offsets = points.map(function () { return { x: 0, y: 0 }; });
   for (let pass = 0; pass < 40; pass++) {
@@ -313,11 +320,16 @@ function spreadPins(map, locations, markers, className) {
   }
   locations.forEach(function (location, index) {
     const offset = { x: Math.round(offsets[index].x), y: Math.round(offsets[index].y) };
-    markers[location.id].setIcon(pinIcon(location, className(location), offset));
+    const marker = markers[location.id];
+    marker.setIcon(pinIcon(location, className(location), offset));
+    // setIcon rewrites the pin's class list, so restore the highlight.
+    const markerElement = marker.getElement();
+    if (markerElement && location.id === activeId) markerElement.classList.add("is-active");
   });
 }
 
 function setActiveMapLocation(locationId, moveMap) {
+  activePristineBayId = locationId;
   document.querySelectorAll(".map-location-link").forEach(function (link) {
     link.classList.toggle("is-active", link.dataset.mapLocation === locationId);
   });
@@ -359,18 +371,18 @@ function initializePristineBayMap() {
     marker.bindPopup("<strong>" + location.label + "</strong><br>" + location.detail);
     marker.on("mouseover", function () { setActiveMapLocation(location.id, false); });
     marker.on("mouseout", function () { setActiveMapLocation(null, false); });
-    marker.on("click", function () {
-      setActiveMapLocation(location.id, true);
-      marker.openPopup();
-    });
+    // bindPopup already toggles the popup on click; calling openPopup() here
+    // would reopen it immediately, so a second click could never close it.
+    marker.on("click", function () { setActiveMapLocation(location.id, true); });
     pristineBayMarkers[location.id] = marker;
   });
 
   const bounds = window.L.latLngBounds(pristineBayLocations.map(function (location) { return location.coordinates; }));
   pristineBayMap.fitBounds(bounds, { padding: [28, 28], maxZoom: 15 });
   const pristinePinClass = function () { return "map-pin"; };
-  spreadPins(pristineBayMap, pristineBayLocations, pristineBayMarkers, pristinePinClass);
-  pristineBayMap.on("zoomend", function () { spreadPins(pristineBayMap, pristineBayLocations, pristineBayMarkers, pristinePinClass); });
+  const spreadPristinePins = function () { spreadPins(pristineBayMap, pristineBayLocations, pristineBayMarkers, pristinePinClass, activePristineBayId); };
+  spreadPristinePins();
+  pristineBayMap.on("zoomend", spreadPristinePins);
 
   document.querySelectorAll(".map-location-link").forEach(function (link) {
     link.addEventListener("mouseenter", function () { setActiveMapLocation(link.dataset.mapLocation, true); });
@@ -381,6 +393,7 @@ function initializePristineBayMap() {
 }
 
 function setActiveActivityLocation(locationId, moveMap) {
+  activeActivityId = locationId;
   document.querySelectorAll(".activity-map-link").forEach(function (link) {
     link.classList.toggle("is-active", link.dataset.activityLocation === locationId);
   });
@@ -419,13 +432,14 @@ function initializeActivitiesMap() {
     marker.bindPopup("<strong>" + location.label + "</strong><br>" + location.detail);
     marker.on("mouseover", function () { setActiveActivityLocation(location.id, false); });
     marker.on("mouseout", function () { setActiveActivityLocation(null, false); });
-    marker.on("click", function () { setActiveActivityLocation(location.id, true); marker.openPopup(); });
+    marker.on("click", function () { setActiveActivityLocation(location.id, true); });
     activityMarkers[location.id] = marker;
   });
 
   activitiesMap.fitBounds(window.L.latLngBounds(activityLocations.map(function (location) { return location.coordinates; })), { padding: [34, 34], maxZoom: 11 });
-  spreadPins(activitiesMap, activityLocations, activityMarkers, activityPinClass);
-  activitiesMap.on("zoomend", function () { spreadPins(activitiesMap, activityLocations, activityMarkers, activityPinClass); });
+  const spreadActivityPins = function () { spreadPins(activitiesMap, activityLocations, activityMarkers, activityPinClass, activeActivityId); };
+  spreadActivityPins();
+  activitiesMap.on("zoomend", spreadActivityPins);
   document.querySelectorAll(".activity-map-link").forEach(function (link) {
     link.addEventListener("mouseenter", function () { setActiveActivityLocation(link.dataset.activityLocation, true); });
     link.addEventListener("mouseleave", function () { setActiveActivityLocation(null, false); });
@@ -455,7 +469,9 @@ function trackSiteEvent(eventName) {
   beaconFrame.setAttribute("aria-hidden", "true");
   beaconFrame.src = "/analytics-events/" + safeName + "/";
   document.body.appendChild(beaconFrame);
-  window.setTimeout(function () { beaconFrame.remove(); }, 5000);
+  // The frame must fetch its page, run the deferred beacon and send before it
+  // is removed; slow mobile connections need well over five seconds for that.
+  window.setTimeout(function () { beaconFrame.remove(); }, 15000);
 }
 
 function fitBookingCalendar() {
@@ -484,12 +500,14 @@ function focusRouteHeading(route) {
 }
 
 /* The Pristine Bay videos sit in a hidden section, but browsers still download
-   a poster image straight away. Attach the posters only when that section opens
-   so they do not compete with the homepage's main photo on slow connections. */
+   a poster image (and, with preload="metadata", the start of each file: up to
+   2 MB per visit) straight away. Attach the posters and allow metadata only
+   when that section opens so they never compete with the homepage's main photo. */
 function showVideoPosters() {
   document.querySelectorAll("video[data-poster]").forEach(function (video) {
     video.poster = video.dataset.poster;
     video.removeAttribute("data-poster");
+    video.preload = "metadata";
   });
 }
 
@@ -520,12 +538,16 @@ function setRoute(route, updateHistory, moveFocus) {
     if (active) button.setAttribute("aria-current", "page");
     else button.removeAttribute("aria-current");
   });
-  navLinks.classList.remove("open");
-  menuButton.setAttribute("aria-expanded", "false");
-  if (updateHistory) {
+  closeMenu();
+  // Keep the language switch on the same section (its href is the other
+  // language's homepage), so EN/ES does not throw the visitor back to the top.
+  if (languageToggle) languageToggle.hash = safeRoute === "home" ? "" : "#" + safeRoute;
+  // Re-selecting the current section must not add history entries or events.
+  if (updateHistory && safeRoute !== currentRoute) {
     history.pushState({ route: safeRoute }, "", "#" + safeRoute);
     trackSiteEvent("section-" + safeRoute);
   }
+  currentRoute = safeRoute;
   window.scrollTo({ top: 0, behavior: "instant" });
   if (moveFocus) focusRouteHeading(safeRoute);
   if (safeRoute === "gallery") updateGallery(currentIndex, false);
@@ -569,13 +591,45 @@ document.querySelectorAll('a[href*="roatanpropertymanagement.com"]').forEach(fun
   });
 });
 
+function closeMenu() {
+  navLinks.classList.remove("open");
+  menuButton.setAttribute("aria-expanded", "false");
+}
+
 menuButton.addEventListener("click", function () {
   const isOpen = navLinks.classList.toggle("open");
   menuButton.setAttribute("aria-expanded", String(isOpen));
 });
+// Tapping outside the open phone menu closes it, as visitors expect.
+document.addEventListener("click", function (event) {
+  if (navLinks.classList.contains("open") && !event.target.closest(".nav-shell")) closeMenu();
+});
 
-window.addEventListener("popstate", function () {
-  setRoute(location.hash.slice(1), false, true);
+/* The skip link targets #main, which is not a section route. Focus the main
+   landmark directly instead of changing the hash, which the router would read
+   as "home" and switch sections. */
+const skipLink = document.querySelector(".skip-link");
+const mainLandmark = document.getElementById("main");
+if (skipLink && mainLandmark) {
+  skipLink.addEventListener("click", function (event) {
+    event.preventDefault();
+    mainLandmark.setAttribute("tabindex", "-1");
+    mainLandmark.focus();
+  });
+}
+
+window.addEventListener("popstate", function (event) {
+  const hash = location.hash.slice(1);
+  const lightboxEntry = Boolean(event.state && event.state.lightbox);
+  // Back while the full-screen gallery is open closes it (it pushed its own
+  // history entry), rather than silently swapping the section behind it.
+  if (lightbox.classList.contains("open") && !lightboxEntry) closeLightbox(true);
+  // In-page anchors such as #main are not routes; leave the section alone.
+  if (hash && !routeNames.includes(hash)) return;
+  const route = hash || "home";
+  if (route !== currentRoute) setRoute(route, false, true);
+  // Forward onto the gallery's own entry reopens it on the same photo.
+  if (lightboxEntry && route === "gallery") openLightbox(true);
 });
 
 function renderThumbnails() {
@@ -585,7 +639,7 @@ function renderThumbnails() {
       '<button class="thumb', photoIndex === currentIndex ? " is-active" : "",
       '" type="button" data-index="', photoIndex,
       '" aria-label="', isSpanish ? "Mostrar foto " : "Show photo ", filteredPosition + 1, isSpanish ? " de " : " of ", filteredIndexes.length, ": ", photo.label, '">',
-      '<img src="', thumbPath(photo.file), '" alt="" loading="lazy" decoding="async" />',
+      '<img srcset="', thumbSrcset(photo.file), '" sizes="(max-width: 1000px) 7.2rem, 7rem" alt="" loading="lazy" decoding="async" />',
       '<span>', String(filteredPosition + 1).padStart(2, "0"), "</span></button>"
     ].join("");
   }).join("");
@@ -662,7 +716,8 @@ function updateLightbox() {
   const photo = photos[currentIndex];
   lightboxSource.srcset = webpPath(photo.file);
   lightboxImage.src = originalPath(photo.file);
-  lightboxImage.alt = photo.label;
+  // The figcaption below describes the photo; a matching alt would be read twice.
+  lightboxImage.alt = "";
   lightboxCaption.textContent = photo.label;
   const filteredPosition = filteredIndexes.indexOf(currentIndex);
   lightboxCount.textContent = String(filteredPosition + 1).padStart(2, "0") + " / " + String(filteredIndexes.length).padStart(2, "0");
@@ -674,8 +729,10 @@ function applyLightboxTransform(animate) {
     lightboxTranslateX = 0;
     lightboxTranslateY = 0;
   } else {
-    const maxX = lightboxMedia.clientWidth * (lightboxScale - 1) / 2;
-    const maxY = lightboxMedia.clientHeight * (lightboxScale - 1) / 2;
+    // Limit panning to the photo as displayed (object-fit: contain leaves empty
+    // space around it), so a zoomed photo can never be dragged out of view.
+    const maxX = Math.max(0, (lightboxImage.offsetWidth * lightboxScale - lightboxMedia.clientWidth) / 2);
+    const maxY = Math.max(0, (lightboxImage.offsetHeight * lightboxScale - lightboxMedia.clientHeight) / 2);
     lightboxTranslateX = Math.max(-maxX, Math.min(maxX, lightboxTranslateX));
     lightboxTranslateY = Math.max(-maxY, Math.min(maxY, lightboxTranslateY));
   }
@@ -717,7 +774,8 @@ function setPageBehindLightboxInert(inert) {
   });
 }
 
-function openLightbox() {
+function openLightbox(fromHistory) {
+  if (lightbox.classList.contains("open")) return;
   lastFocusedElement = document.activeElement;
   setPageBehindLightboxInert(true);
   updateLightbox();
@@ -725,29 +783,34 @@ function openLightbox() {
   lightbox.setAttribute("aria-hidden", "false");
   document.body.classList.add("lightbox-open");
   resetLightboxZoom(false);
+  // Its own history entry lets the phone's Back gesture close the gallery
+  // (and Forward reopen it, in which case the entry already exists).
+  if (!fromHistory) history.pushState({ route: "gallery", lightbox: true }, "", "#gallery");
   lightboxClose.focus();
 }
 
-function closeLightbox() {
+function closeLightbox(fromHistory) {
+  if (!lightbox.classList.contains("open")) return;
   lightbox.classList.remove("open");
   lightbox.setAttribute("aria-hidden", "true");
   document.body.classList.remove("lightbox-open");
   setPageBehindLightboxInert(false);
   resetLightboxZoom(false);
-  lightboxImage.src = "";
+  lightboxImage.removeAttribute("src");
   lightboxSource.srcset = "";
   if (lastFocusedElement) lastFocusedElement.focus();
+  if (!fromHistory && history.state && history.state.lightbox) history.back();
 }
 
-document.getElementById("galleryExpand").addEventListener("click", openLightbox);
-lightboxClose.addEventListener("click", closeLightbox);
+document.getElementById("galleryExpand").addEventListener("click", function () { openLightbox(false); });
+lightboxClose.addEventListener("click", function () { closeLightbox(false); });
 document.getElementById("lightboxPrev").addEventListener("click", function () { moveGallery(-1); });
 document.getElementById("lightboxNext").addEventListener("click", function () { moveGallery(1); });
 document.getElementById("lightboxZoomIn").addEventListener("click", function () { setLightboxZoom(lightboxScale + .5, true); });
 document.getElementById("lightboxZoomOut").addEventListener("click", function () { setLightboxZoom(lightboxScale - .5, true); });
 document.getElementById("lightboxZoomReset").addEventListener("click", function () { resetLightboxZoom(true); });
 lightbox.addEventListener("click", function (event) {
-  if (event.target === lightbox) closeLightbox();
+  if (event.target === lightbox) closeLightbox(false);
 });
 lightboxMedia.addEventListener("wheel", function (event) {
   event.preventDefault();
@@ -875,10 +938,17 @@ function trapLightboxFocus(event) {
 
 document.addEventListener("keydown", function (event) {
   if (lightbox.classList.contains("open")) {
-    if (event.key === "Escape") closeLightbox();
+    // Alt/Cmd + arrow is the browser's Back/Forward; leave it alone.
+    if (event.altKey || event.metaKey) return;
+    if (event.key === "Escape") closeLightbox(false);
     if (event.key === "Tab") trapLightboxFocus(event);
     if (event.key === "ArrowLeft") moveGallery(-1);
     if (event.key === "ArrowRight") moveGallery(1);
+    return;
+  }
+  if (event.key === "Escape" && navLinks.classList.contains("open")) {
+    closeMenu();
+    menuButton.focus();
     return;
   }
   // Leave arrow keys to form controls such as the photo filter dropdown.
@@ -916,13 +986,20 @@ document.querySelectorAll("[data-scroll-target]").forEach(function (button) {
 document.getElementById("bookingReset").addEventListener("click", function () {
   const resetButton = this;
   document.getElementById("bookingCalendar").classList.remove("is-loaded");
-  bookingIframe.src = bookingUrl;
+  // location.replace() reloads the calendar without adding a history entry
+  // (assigning src would make the browser's Back button rewind the iframe).
+  try {
+    bookingIframe.contentWindow.location.replace(bookingUrl);
+  } catch (error) {
+    bookingIframe.src = bookingUrl;
+  }
   resetButton.textContent = isSpanish ? "Calendario restablecido" : "Calendar restored";
   window.setTimeout(function () { resetButton.textContent = isSpanish ? "Volver al calendario" : "Return to calendar"; }, 1800);
 });
 
 window.addEventListener("resize", function () {
   if (pristineBayMap) pristineBayMap.invalidateSize();
+  if (activitiesMap) activitiesMap.invalidateSize();
   fitBookingCalendar();
 });
 
@@ -931,8 +1008,18 @@ document.querySelectorAll(".video-fullscreen").forEach(function (button) {
     const videos = document.querySelectorAll("#exploreView video");
     const video = videos[Number(button.dataset.video)];
     if (!video) return;
-    if (video.requestFullscreen) video.requestFullscreen();
-    else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+    if (video.requestFullscreen) {
+      video.requestFullscreen().catch(function () {});
+    } else if (video.webkitEnterFullscreen) {
+      // iPhone refuses full screen before the metadata has loaded.
+      if (video.readyState >= 1) {
+        video.webkitEnterFullscreen();
+      } else {
+        video.preload = "metadata";
+        video.addEventListener("loadedmetadata", function () { video.webkitEnterFullscreen(); }, { once: true });
+        video.load();
+      }
+    }
   });
 });
 
@@ -940,3 +1027,6 @@ renderThumbnails();
 updateGallery(0, false);
 const initialRoute = routeNames.includes(location.hash.slice(1)) ? location.hash.slice(1) : "home";
 setRoute(initialRoute, false);
+// Count arrivals straight into a section (links from the guide pages, shared
+// links, bookmarks); the pages linking here cannot record it themselves.
+if (initialRoute !== "home") trackSiteEvent("section-" + initialRoute);
