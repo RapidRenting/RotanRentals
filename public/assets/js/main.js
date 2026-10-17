@@ -618,15 +618,18 @@ if (skipLink && mainLandmark) {
   });
 }
 
-window.addEventListener("popstate", function () {
+window.addEventListener("popstate", function (event) {
   const hash = location.hash.slice(1);
+  const lightboxEntry = Boolean(event.state && event.state.lightbox);
   // Back while the full-screen gallery is open closes it (it pushed its own
   // history entry), rather than silently swapping the section behind it.
-  if (lightbox.classList.contains("open")) closeLightbox(true);
+  if (lightbox.classList.contains("open") && !lightboxEntry) closeLightbox(true);
   // In-page anchors such as #main are not routes; leave the section alone.
   if (hash && !routeNames.includes(hash)) return;
   const route = hash || "home";
   if (route !== currentRoute) setRoute(route, false, true);
+  // Forward onto the gallery's own entry reopens it on the same photo.
+  if (lightboxEntry && route === "gallery") openLightbox(true);
 });
 
 function renderThumbnails() {
@@ -771,7 +774,8 @@ function setPageBehindLightboxInert(inert) {
   });
 }
 
-function openLightbox() {
+function openLightbox(fromHistory) {
+  if (lightbox.classList.contains("open")) return;
   lastFocusedElement = document.activeElement;
   setPageBehindLightboxInert(true);
   updateLightbox();
@@ -779,8 +783,9 @@ function openLightbox() {
   lightbox.setAttribute("aria-hidden", "false");
   document.body.classList.add("lightbox-open");
   resetLightboxZoom(false);
-  // Its own history entry lets the phone's Back gesture close the gallery.
-  history.pushState({ route: "gallery", lightbox: true }, "", "#gallery");
+  // Its own history entry lets the phone's Back gesture close the gallery
+  // (and Forward reopen it, in which case the entry already exists).
+  if (!fromHistory) history.pushState({ route: "gallery", lightbox: true }, "", "#gallery");
   lightboxClose.focus();
 }
 
@@ -797,7 +802,7 @@ function closeLightbox(fromHistory) {
   if (!fromHistory && history.state && history.state.lightbox) history.back();
 }
 
-document.getElementById("galleryExpand").addEventListener("click", openLightbox);
+document.getElementById("galleryExpand").addEventListener("click", function () { openLightbox(false); });
 lightboxClose.addEventListener("click", function () { closeLightbox(false); });
 document.getElementById("lightboxPrev").addEventListener("click", function () { moveGallery(-1); });
 document.getElementById("lightboxNext").addEventListener("click", function () { moveGallery(1); });
