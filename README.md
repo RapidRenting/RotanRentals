@@ -22,6 +22,7 @@ After the workflow completes the site will be available at:
   - `responsive/` — 480/800/1200/1600px copies offered through `srcset`
   - `thumbs/` — 480px gallery thumbnails plus `-240` copies for 1x screens (also produced by `build_responsive_images.py`)
   - `og/` — 1200×630 JPEG link-preview images (keep each under ~300 KB so WhatsApp shows them)
+  - `captions/` — WebVTT caption tracks for the two Pristine Bay clips, one per language; the English page defaults to the `.en.vtt` track and the Spanish build switches the default to `.es.vtt`
 
 ## Photos
 
