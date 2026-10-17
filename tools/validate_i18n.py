@@ -133,8 +133,9 @@ def validate_page_pair(en_rel: str, es_rel: str, en_path: str, es_path: str) -> 
         except json.JSONDecodeError as exc:
             errors.append(f"{es_rel}: JSON-LD block {index + 1} is invalid: {exc}")
 
-    handoff_pattern = re.compile(r"MANAGED BY\s*<a[^>]*>ROATAN PROPERTY MANAGEMENT")
-    if not handoff_pattern.search(en_text) or not handoff_pattern.search(es_text):
+    en_handoff = re.compile(r"MANAGED BY\s*<a[^>]*>ROATAN PROPERTY MANAGEMENT")
+    es_handoff = re.compile(r"ADMINISTRADO POR\s*<a[^>]*>ROATAN PROPERTY MANAGEMENT")
+    if not en_handoff.search(en_text) or not es_handoff.search(es_text):
         errors.append(f"{en_rel}/{es_rel}: required property-management handoff changed")
     if "`r`n" in es_text:
         errors.append(f"{es_rel}: contains escaped newline text")

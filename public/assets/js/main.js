@@ -103,7 +103,7 @@ const spanishPhotoLabels = [
   "Sala con sombra bajo la pérgola del jardín",
   "Sala techada junto a la piscina infinita",
   "Mesa de comedor con vista a la piscina privada",
-  "Tumbonas junto al borde infinito",
+  "Camastros junto al borde infinito",
   "Terraza techada con sala y comedor",
   "Sala luminosa en la planta principal con acceso a la piscina",
   "Sala con acceso directo a la terraza de la piscina",

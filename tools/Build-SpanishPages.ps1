@@ -35,6 +35,7 @@ $shared = [ordered]@{
   '>Activities</' = '>Actividades</'
   '>Availability</' = '>Disponibilidad</'
   '<strong>Explore more</strong>' = '<strong>Conozca más</strong>'
+  '<strong>MANAGED BY <a' = '<strong>ADMINISTRADO POR <a'
   'aria-label="More stay guides"' = 'aria-label="Más guías para su estadía"'
   '>Pristine Bay vacation rental</a>' = '>Alquiler vacacional en Pristine Bay</a>'
   '>Roatán golf and diving</a>' = '>Golf y buceo en Roatán</a>'
@@ -114,7 +115,7 @@ $homePage.Add('>57 photos</span>', '>57 fotos</span>')
 $homePage.Add('aria-label="Property photo thumbnails"', 'aria-label="Miniaturas de fotos de la propiedad"')
 $homePage.Add('Activities &amp; amenities,<br />all around you.', 'Actividades y amenidades,<br />a su alrededor.')
 $homePage.Add('<p class="eyebrow">Explore the area</p>', '<p class="eyebrow">Explore los alrededores</p>')
-$homePage.Add('Roatán Villa at Pristine Bay places you close to championship golf, world-class diving, beaches, dining, breweries, and memorable island outings.', 'Villa Roatán en Pristine Bay lo acerca al golf de campeonato, buceo de clase mundial, playas, restaurantes, cervecerías y paseos inolvidables por la isla.')
+$homePage.Add('Roatán Villa at Pristine Bay places you close to championship golf, world-class diving, beaches, dining, breweries, and memorable island outings.', 'Roatán Villa en Pristine Bay lo acerca al golf de campeonato, buceo de clase mundial, playas, restaurantes, cervecerías y paseos inolvidables por la isla.')
 $homePage.Add('aria-label="Explore activity categories"', 'aria-label="Explorar categorías de actividades"')
 $homePage.Add('<strong>Golf</strong><small>Championship course moments away.</small><em>Explore golf&nbsp;→</em>', '<strong>Golf</strong><small>Campo de campeonato a pocos minutos.</small><em>Conocer el golf&nbsp;→</em>')
 $homePage.Add('<strong>Diving</strong><small>Reefs, wrecks, and clear Caribbean water.</small><em>Explore diving&nbsp;→</em>', '<strong>Buceo</strong><small>Arrecifes, naufragios y aguas cristalinas del Caribe.</small><em>Conocer el buceo&nbsp;→</em>')
@@ -161,13 +162,15 @@ $homePage.Add('<strong>Excursions &amp; tours</strong><p>Book fishing, snorkelli
 $homePage.Add('Times, access, reservations, and availability may vary. Confirm details directly with providers or the property manager. Category photography is representative.', 'Los horarios, el acceso, las reservaciones y la disponibilidad pueden variar. Confirme los detalles directamente con los proveedores o con la administración de la propiedad. Las fotografías de las categorías son ilustrativas.')
 $homePage.Add('The setting', 'El entorno')
 $homePage.Add('Pristine Bay,<br />island pace.', 'Pristine Bay,<br />al ritmo de la isla.')
-$homePage.Add('A gated coastal community centered around the Black Pearl Golf Course, with easy access to world-class diving, shoreline, and relaxed island living.', 'Una comunidad costera cerrada alrededor del campo de golf Black Pearl, con fácil acceso a buceo de clase mundial, la costa y el estilo de vida relajado de la isla.')
+$homePage.Add('A gated coastal community centred around the Black Pearl Golf Course, with easy access to world-class diving, shoreline, and relaxed island living.', 'Una comunidad costera cerrada alrededor del campo de golf Black Pearl, con fácil acceso a buceo de clase mundial, la costa y el estilo de vida relajado de la isla.')
 $homePage.Add('aria-label="Pristine Bay highlights"', 'aria-label="Lo mejor de Pristine Bay"')
 $homePage.Add('>Gated community</span>', '>Comunidad cerrada</span>')
 $homePage.Add('>Diving &amp; shoreline</span>', '>Buceo y costa</span>')
 $homePage.Add('>Relaxed island living</span>', '>Vida isleña relajada</span>')
 $homePage.Add('Your browser does not support embedded video.', 'Su navegador no permite reproducir este video.')
 $homePage.Add('>Full screen</button>', '>Pantalla completa</button>')
+$homePage.Add(' label="English" default />', ' label="English" />')
+$homePage.Add(' label="Español" />', ' label="Español" default />')
 $homePage.Add('aria-label="Full screen: A day in Pristine Bay"', 'aria-label="Pantalla completa: Un día en Pristine Bay"')
 $homePage.Add('aria-label="Full screen: Arrive, then explore"', 'aria-label="Pantalla completa: Llegue y empiece a explorar"')
 $homePage.Add("<strong>A day in Pristine Bay</strong><p>Tennis, the private Beach Club and the Black Pearl fairways, all inside the community.</p>", '<strong>Un día en Pristine Bay</strong><p>Tenis, el Beach Club privado y los campos de Black Pearl, todo dentro de la comunidad.</p>')
@@ -242,7 +245,7 @@ $pristine.Add('alt="Private infinity pool and patio at 1111 Pearl Court"', 'alt=
 $pristine.Add('alt="Pristine Bay coastline on Roatán''s north shore"', 'alt="Costa de Pristine Bay en la zona norte de Roatán"')
 $pristine.Add('alt="1111 Pearl Court villa and private pool inside Pristine Bay"', 'alt="Villa 1111 Pearl Court y piscina privada dentro de Pristine Bay"')
 $pristine.Add('>Stay inside Pristine Bay</p>', '>Hospédese dentro de Pristine Bay</p>')
-$pristine.Add('Gated comfort.<br />Island close by.', 'Comodidad y seguridad.<br />La isla a su alcance.')
+$pristine.Add('Gated comfort.<br />Island close by.', 'Comunidad cerrada.<br />La isla a su alcance.')
 $pristine.Add('1111 Pearl Court places four guests inside the gated Pristine Bay community, with a private infinity pool at home and golf, diving and Caribbean days waiting nearby.', '1111 Pearl Court aloja a cuatro personas dentro de la comunidad cerrada Pristine Bay, con piscina infinita privada y el golf, el buceo y el Caribe muy cerca.')
 $pristine.Add('>Check availability</a>', '>Consultar disponibilidad</a>')
 $pristine.Add('>Explore nearby activities</a>', '>Conocer actividades cercanas</a>')
