@@ -239,7 +239,7 @@ def validate_local_assets() -> list[str]:
     script = (PUBLIC / "assets/js/main.js").read_text(encoding="utf-8")
     for file in re.findall(r'\{ file: "([^"]+)"', script):
         stem = Path(file).stem
-        expected = [media / "gallery" / file, media / "enhanced" / f"{stem}.webp", media / "thumbs" / f"{stem}.webp"]
+        expected = [media / "gallery" / file, media / "enhanced" / f"{stem}.webp", media / "thumbs" / f"{stem}.webp", media / "thumbs" / f"{stem}-240.webp"]
         expected += [media / "responsive" / f"{stem}-{width}.webp" for width in (480, 800, 1200, 1600)]
         for path in expected:
             if not path.is_file():

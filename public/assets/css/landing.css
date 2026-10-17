@@ -42,7 +42,7 @@
 .landing-card-copy { padding: 1.45rem; }
 .landing-card h3 { margin: 0 0 .55rem; color: var(--teal-800); font-family: var(--serif); font-size: 1.55rem; font-weight: 500; line-height: 1.08; }
 .landing-card p { margin: 0; color: var(--muted); font-size: .88rem; }
-.landing-card a { display: inline-block; margin-top: 1rem; border-bottom: 1px solid rgba(22,132,125,.32); color: var(--aqua-600); font-size: .78rem; font-weight: 700; }
+.landing-card a { display: inline-block; margin-top: 1rem; padding: .15rem 0; border-bottom: 1px solid rgba(22,132,125,.32); color: var(--aqua-600); font-size: .78rem; font-weight: 700; }
 .landing-section.is-dark .landing-card { border-color: rgba(255,255,255,.13); background: rgba(255,255,255,.07); box-shadow: none; }
 .landing-section.is-dark .landing-card h3 { color: var(--white); }
 .landing-section.is-dark .landing-card p { color: rgba(255,255,255,.7); }
@@ -101,8 +101,4 @@
   .landing-card img { width: 100%; height: auto; min-height: 0; aspect-ratio: 4 / 3; }
   .landing-list { grid-template-columns: 1fr; }
   .guide-links-inner { align-items: flex-start; flex-direction: column; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .landing-card { transition: none; }
 }

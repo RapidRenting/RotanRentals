@@ -51,6 +51,18 @@ def main() -> None:
                 resized = image.resize((width, height), Image.Resampling.LANCZOS)
                 resized.save(target, "WEBP", quality=QUALITY, method=6)
                 written += 1
+    # The gallery rail offers a 240px thumbnail for 1x screens beside the 480px one.
+    thumbs = MEDIA / "thumbs"
+    for source in sorted(thumbs.glob("*.webp")):
+        if source.stem.endswith("-240"):
+            continue
+        target = thumbs / f"{source.stem}-240.webp"
+        if target.exists() and target.stat().st_mtime >= source.stat().st_mtime:
+            continue
+        with Image.open(source) as opened:
+            image = opened.convert("RGB")
+            image.resize((240, round(image.height * 240 / image.width)), Image.Resampling.LANCZOS).save(target, "WEBP", quality=80, method=6)
+            written += 1
     total = sum(path.stat().st_size for path in OUTPUT.glob("*.webp"))
     print(f"Wrote {written} images; responsive/ holds {total / 1_000_000:.1f} MB.")
 

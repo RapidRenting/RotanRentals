@@ -16,31 +16,21 @@
   --aqua-300: #86d3cb;
   --aqua-100: #dbf1ee;
 
-  --coral-600: #d8603f;
   --coral-500: #ee7c5c;
-  --coral-300: #f8b19a;
-  --coral-700: #b84a2c; /* coral for text: passes WCAG AA where coral-600 does not */
+  --coral-700: #b84a2c; /* coral for text and focus rings: passes WCAG contrast where coral-500 does not */
   --sun-400: #f3c479;
 
-  /* Aliases kept so every legacy rule keeps resolving. */
-  --ivory: var(--sand-100);
-  --paper: var(--sand-50);
-  --teal: var(--teal-800);
-  --teal-2: var(--teal-600);
   --ink: #16302f;
   --muted: #52666a; /* was #5e7173; deepened to pass WCAG AA on sand surfaces */
-  --coral: var(--coral-500);
   --white: #fff;
 
   --line: rgba(11, 52, 55, .12);
   --line-soft: rgba(11, 52, 55, .07);
-  --line-bright: rgba(255, 255, 255, .16);
 
   --shadow-xs: 0 1px 2px rgba(9, 42, 45, .05);
   --shadow-sm: 0 1px 2px rgba(9, 42, 45, .04), 0 6px 18px -10px rgba(9, 42, 45, .16);
   --shadow-md: 0 2px 6px rgba(9, 42, 45, .04), 0 18px 38px -18px rgba(9, 42, 45, .22);
   --shadow-lg: 0 4px 12px rgba(9, 42, 45, .05), 0 34px 72px -28px rgba(9, 42, 45, .32);
-  --shadow: var(--shadow-lg);
 
   --r-xs: .5rem;
   --r-sm: .8rem;
@@ -82,8 +72,10 @@ a { color: inherit; text-decoration: none; }
    keeps the 1em box below any component rule that sizes an icon circle. */
 .icons-pending :where(.material-symbols-rounded) { display: inline-block; width: 1em; }
 .icons-pending .material-symbols-rounded { overflow: hidden !important; color: transparent !important; }
+/* coral-700 keeps the ring above 3:1 on the sand and white surfaces (coral-500
+   measured about 2.7:1 there) while staying visible on the dark teal panels. */
 a:focus-visible, button:focus-visible, video:focus-visible, select:focus-visible {
-  outline: 3px solid var(--coral-500);
+  outline: 3px solid var(--coral-700);
   outline-offset: 3px;
 }
 ::selection { background: var(--aqua-300); color: var(--teal-900); }
@@ -317,19 +309,12 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
     radial-gradient(80% 60% at 88% 105%, rgba(243, 196, 121, .16), transparent 62%),
     var(--sand-100);
 }
-.home-photo { position: relative; height: clamp(38rem, calc(100svh - 5.25rem), 47rem); min-height: 0; overflow: hidden; background: var(--teal-900); }
+/* The vh line is the fallback for browsers without svh (Safari before 15.4);
+   without it the hero would collapse to height: auto. */
+.home-photo { position: relative; height: clamp(38rem, calc(100vh - 5.25rem), 47rem); height: clamp(38rem, calc(100svh - 5.25rem), 47rem); min-height: 0; overflow: hidden; background: var(--teal-900); }
 .home-photo picture { position: absolute; inset: 0; display: block; }
 .home-photo picture, .home-photo img { width: 100%; height: 100%; }
 .home-photo img { object-fit: cover; }
-.home-photo-shade, .photo-credit { display: none; }
-.home-photo-shade {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(0deg, rgba(4, 28, 30, .62), rgba(4, 28, 30, .1) 34%, transparent 58%),
-    linear-gradient(180deg, rgba(4, 28, 30, .34), transparent 26%);
-  pointer-events: none;
-}
 .home-photo-link {
   position: absolute;
   z-index: 2;
@@ -341,25 +326,9 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 /* Section headings receive focus from main.js on navigation; they are not controls. */
 [data-view] :is(h1, h2)[tabindex="-1"]:focus { outline: none; }
 .home-photo-link:focus-visible { outline: 3px solid var(--coral-500); outline-offset: -6px; }
-.photo-credit {
-  position: absolute;
-  z-index: 3;
-  right: 1.4rem;
-  bottom: 1.3rem;
-  padding: .5rem .85rem;
-  border: 1px solid rgba(255, 255, 255, .26);
-  border-radius: 999px;
-  background: rgba(5, 30, 32, .42);
-  color: rgba(255, 255, 255, .92);
-  font-size: .72rem;
-  font-weight: 500;
-  letter-spacing: .01em;
-  pointer-events: none;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
 .home-content {
   display: flex;
+  height: clamp(38rem, calc(100vh - 5.25rem), 47rem);
   height: clamp(38rem, calc(100svh - 5.25rem), 47rem);
   min-height: 0;
   flex-direction: column;
@@ -484,7 +453,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
     var(--sand-100);
 }
 .villa-details-intro { align-self: start; max-width: 31rem; }
-.villa-details-intro > .eyebrow { display: none; }
 .villa-details-intro h2 { margin-bottom: 1.2rem; font-size: clamp(2.8rem, 3.7vw, 4.5rem); line-height: .94; white-space: nowrap; }
 .villa-details-intro > p:not(.eyebrow) { color: var(--muted); }
 .villa-details-intro .text-link { margin-top: 1rem; font-size: .82rem; }
@@ -765,7 +733,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 .route-ideas div { padding: .7rem .6rem; }
 .route-ideas strong, .close-grid strong { display: block; font-family: var(--serif); font-size: .8rem; }
 .route-ideas p, .close-grid p { margin: .3rem 0; color: var(--muted); font-size: .74rem; }
-.route-ideas a { color: var(--teal-700); font-size: .72rem; font-weight: 700; }
+.route-ideas a { display: inline-block; padding: .2rem 0; color: var(--teal-700); font-size: .72rem; font-weight: 700; }
 .close-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
 .close-grid article { padding: 0 .75rem; border-left: 1px solid var(--line-soft); }
 .close-grid article:first-child { border-left: 0; padding-left: 0; }
@@ -787,11 +755,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 .explore-intro { align-self: center; max-width: 34rem; }
 .explore-intro h2 { margin-bottom: 1.25rem; font-size: clamp(3rem, 5vw, 5.5rem); line-height: .92; }
 .explore-intro > p:not(.eyebrow) { color: var(--muted); }
-.explore-intro .eyebrow.light {
-  border-color: rgba(22, 132, 125, .22);
-  background: rgba(43, 163, 154, .1);
-  color: var(--aqua-600);
-}
 .video-showcase { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem; align-items: center; }
 .video-card {
   overflow: hidden;
@@ -822,7 +785,9 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 .video-fullscreen:hover { color: var(--coral-700); }
 .video-card strong { display: block; margin-top: .45rem; font-family: var(--serif); font-size: 1.28rem; font-weight: 500; letter-spacing: -.02em; }
 .video-card p { margin: .4rem 0 0; color: var(--muted); font-size: .82rem; }
-.video-frame video:fullscreen,
+/* Separate rules: a browser that does not recognise one selector would
+   otherwise drop the whole list. */
+.video-frame video:fullscreen { width: 100vw; height: 100vh; object-fit: contain !important; background: #000; }
 .video-frame video:-webkit-full-screen { width: 100vw; height: 100vh; object-fit: contain !important; background: #000; }
 .setting-features { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin-top: 1.7rem; }
 .setting-features span { display: grid; place-items: center; gap: .45rem; padding: .75rem .35rem; border-right: 1px solid var(--line-soft); color: var(--teal-800); font-size: .66rem; font-weight: 600; text-align: center; }
@@ -832,7 +797,15 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 /* Essential Leaflet presentation is kept local so the map remains stable if CDN CSS is unavailable. */
 .leaflet-container { position: relative; overflow: hidden; font: 500 .75rem/1.5 var(--sans); outline-offset: 1px; -webkit-tap-highlight-color: transparent; }
 .leaflet-pane, .leaflet-tile, .leaflet-marker-icon, .leaflet-tile-container, .leaflet-pane > svg, .leaflet-pane > canvas, .leaflet-zoom-box, .leaflet-image-layer, .leaflet-layer { position: absolute; top: 0; left: 0; }
-.leaflet-tile, .leaflet-marker-icon { -webkit-user-drag: none; user-select: none; }
+.leaflet-tile, .leaflet-marker-icon { -webkit-user-drag: none; -webkit-user-select: none; user-select: none; }
+/* Touch handling and zoom animation as in Leaflet's own stylesheet, so a finger
+   on the map pans it instead of scrolling the page. */
+.leaflet-container.leaflet-touch-zoom { touch-action: pan-x pan-y; }
+.leaflet-container.leaflet-touch-drag { touch-action: none; touch-action: pinch-zoom; }
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom { touch-action: none; }
+.leaflet-zoom-anim .leaflet-zoom-animated { transition: transform .25s cubic-bezier(0, 0, .25, 1); }
+.leaflet-zoom-anim .leaflet-tile, .leaflet-pan-anim .leaflet-tile { transition: none; }
+.leaflet-zoom-anim .leaflet-zoom-hide { visibility: hidden; }
 .leaflet-container .leaflet-tile { width: auto; max-width: none !important; max-height: none !important; padding: 0; visibility: hidden; }
 .leaflet-container .leaflet-tile-loaded { visibility: inherit; }
 .leaflet-pane { z-index: 400; }
@@ -859,7 +832,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 .leaflet-control-attribution a { color: var(--teal-700); text-decoration: underline; }
 .leaflet-attribution-flag { display: inline !important; width: 1em; height: .67em; vertical-align: baseline; }
 .leaflet-popup { position: absolute; margin-bottom: 1.25rem; text-align: center; }
-.leaflet-popup-content-wrapper { padding: 1px; border-radius: var(--r-sm); background: var(--white); box-shadow: 0 12px 32px -12px rgba(9, 42, 45, .45); text-align: left; }
+.leaflet-popup-content-wrapper { padding: 1px; border-radius: var(--r-sm); background: var(--white); box-shadow: 0 12px 32px -12px rgba(9, 42, 45, .45); color: var(--ink); font: 600 .75rem/1.4 var(--sans); text-align: left; }
 .leaflet-popup-content { min-height: 1px; margin: .8rem 1rem; }
 .leaflet-popup-tip-container { position: absolute; left: 50%; width: 2.5rem; height: 1.25rem; margin-left: -1.25rem; overflow: hidden; pointer-events: none; }
 .leaflet-popup-tip { width: 1rem; height: 1rem; margin: -.55rem auto 0; background: var(--white); box-shadow: 0 5px 24px rgba(9, 42, 45, .2); transform: rotate(45deg); }
@@ -905,8 +878,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 }
 .map-pin-shape b { transform: rotate(45deg); color: var(--white); font: 700 .82rem var(--sans); }
 .map-pin.is-active .map-pin-shape { background: linear-gradient(140deg, var(--aqua-500), var(--teal-800)); box-shadow: 0 0 0 .4rem rgba(43, 163, 154, .28), 0 12px 30px -8px rgba(2, 18, 20, .5); transform: rotate(-45deg) scale(1.18); }
-.leaflet-popup-content-wrapper { border-radius: var(--r-sm); color: var(--ink); font: 600 .75rem/1.4 var(--sans); }
-.leaflet-popup-content { margin: .8rem 1rem; }
 .location-copy { position: relative; align-self: center; padding: clamp(1.75rem, 3vw, 3rem); }
 .location-copy h3 { margin: 0 0 .85rem; font-family: var(--serif); font-size: clamp(2.2rem, 3.5vw, 4rem); font-weight: 500; letter-spacing: -.03em; line-height: .95; }
 .location-copy > p:not(.eyebrow) { color: rgba(255, 255, 255, .76); }
@@ -984,7 +955,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 .booking-actions .booking-cta { margin-top: 0; }
 .booking-contact { display: inline-flex; min-height: 3rem; align-items: center; justify-content: center; gap: .4rem; padding: .68rem 1rem; border: 1px solid rgba(15, 113, 107, .2); border-radius: 999px; background: var(--aqua-100); color: var(--teal-800); font-size: .76rem; font-weight: 700; text-decoration: none; white-space: nowrap; transition: background .25s var(--ease), color .25s var(--ease), transform .25s var(--ease); }
 .booking-contact span { font-size: 1rem; }
-.booking-contact:hover { background: var(--aqua-100); color: var(--teal-700); transform: translateY(-2px); }
+.booking-contact:hover { background: #c9e9e4; color: var(--teal-700); transform: translateY(-2px); }
 .booking-note {
   margin-top: 1.5rem;
   padding: 1.1rem 1.15rem;
@@ -995,7 +966,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 }
 .booking-note strong { font-family: var(--serif); font-size: 1.05rem; font-weight: 600; }
 .booking-note p { margin: .4rem 0 .6rem; color: var(--muted); font-size: .8rem; }
-.booking-note a { color: var(--teal-700); font-size: .74rem; font-weight: 700; text-decoration: underline; text-underline-offset: .2rem; }
+.booking-note a { display: inline-block; padding: .2rem 0; color: var(--teal-700); font-size: .74rem; font-weight: 700; text-decoration: underline; text-underline-offset: .2rem; }
 .booking-note a:hover { color: var(--coral-700); }
 .booking-shell {
   width: min(100%, 34rem);
@@ -1094,12 +1065,12 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 }
 .lightbox.open { display: flex; animation: fade .28s var(--ease) both; }
 .lightbox figure { width: min(88vw, 1400px); margin: 0; }
-.lightbox-media { display: grid; width: 100%; height: min(76vh, 900px); place-items: center; overflow: hidden; border-radius: var(--r-xs); cursor: zoom-in; touch-action: none; user-select: none; }
+.lightbox-media { display: grid; width: 100%; height: min(76vh, 900px); place-items: center; overflow: hidden; border-radius: var(--r-xs); cursor: zoom-in; touch-action: none; -webkit-user-select: none; user-select: none; }
 .lightbox-media.is-zoomed { cursor: grab; }
 .lightbox-media.is-dragging { cursor: grabbing; }
 .lightbox picture { display: grid; width: 100%; height: 100%; place-items: center; transform-origin: center; will-change: transform; }
 .lightbox source { display: none; }
-.lightbox img { width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; user-select: none; }
+.lightbox img { width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; -webkit-user-select: none; user-select: none; }
 .lightbox figcaption { display: flex; justify-content: space-between; gap: 2rem; margin-top: .9rem; color: rgba(255, 255, 255, .82); font-size: .82rem; }
 .lightbox figcaption span { color: var(--aqua-300); font-variant-numeric: tabular-nums; }
 .lightbox-close {
@@ -1137,22 +1108,25 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
 .lightbox-tools button:nth-child(2) { width: 3.4rem; border-radius: 999px; font-size: .64rem; font-variant-numeric: tabular-nums; }
 .lightbox-tools small { grid-column: 1 / -1; margin-top: .2rem; color: rgba(255, 255, 255, .5); font-size: .6rem; white-space: nowrap; }
 
-/* Entrance choreography, driven by the .is-active class the router already sets. */
-.home-view.is-active .home-photo { animation: fade 1s var(--ease) both; }
-.home-view.is-active .home-copy { animation: rise .85s var(--ease) both; }
-.home-view.is-active .property-facts > a { animation: rise .7s var(--ease) both; }
+/* Entrance choreography, driven by the .is-active class the router already sets.
+   "backwards" holds the start state only during any delay; once finished the
+   normal styles apply again, so hover lifts on the cards keep working ("both"
+   pinned transform: none forever and silently cancelled them). */
+.home-view.is-active .home-photo { animation: fade 1s var(--ease) backwards; }
+.home-view.is-active .home-copy { animation: rise .85s var(--ease) backwards; }
+.home-view.is-active .property-facts > a { animation: rise .7s var(--ease) backwards; }
 .home-view.is-active .property-facts > a:nth-child(1) { animation-delay: .14s; }
 .home-view.is-active .property-facts > a:nth-child(2) { animation-delay: .22s; }
-.gallery-view.is-active .gallery-heading { animation: rise .6s var(--ease) both; }
-.gallery-view.is-active .gallery-stage { animation: settle .7s var(--ease) both; }
-.gallery-view.is-active .thumbnail-panel { animation: fade .9s var(--ease) both; animation-delay: .12s; }
-.activities-view.is-active .activities-intro { animation: rise .65s var(--ease) both; }
-.activities-view.is-active .activities-map-card { animation: settle .75s var(--ease) both; animation-delay: .08s; }
-.explore-view.is-active .explore-intro { animation: rise .75s var(--ease) both; }
-.explore-view.is-active .video-card { animation: rise .75s var(--ease) both; }
+.gallery-view.is-active .gallery-heading { animation: rise .6s var(--ease) backwards; }
+.gallery-view.is-active .gallery-stage { animation: settle .7s var(--ease) backwards; }
+.gallery-view.is-active .thumbnail-panel { animation: fade .9s var(--ease) backwards; animation-delay: .12s; }
+.activities-view.is-active .activities-intro { animation: rise .65s var(--ease) backwards; }
+.activities-view.is-active .activities-map-card { animation: settle .75s var(--ease) backwards; animation-delay: .08s; }
+.explore-view.is-active .explore-intro { animation: rise .75s var(--ease) backwards; }
+.explore-view.is-active .video-card { animation: rise .75s var(--ease) backwards; }
 .explore-view.is-active .video-card:nth-child(2) { animation-delay: .12s; }
-.book-view.is-active .book-intro { animation: rise .75s var(--ease) both; }
-.book-view.is-active .booking-shell { animation: settle .8s var(--ease) both; animation-delay: .08s; }
+.book-view.is-active .book-intro { animation: rise .75s var(--ease) backwards; }
+.book-view.is-active .booking-shell { animation: settle .8s var(--ease) backwards; animation-delay: .08s; }
 
 /* A barely-there drift keeps the hero alive; never on touch or reduced motion,
    where a permanently-scaled crop would be the only lasting effect. */
@@ -1178,11 +1152,8 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
     border-radius: var(--r-xl) var(--r-xl) 0 0;
     background: linear-gradient(180deg, var(--sand-50) 0 65%, transparent);
   }
-  /* Lift the credit clear of the copy card that now overlaps the photo. */
-  .photo-credit { right: 1.1rem; bottom: 3.5rem; }
   .home-copy { max-width: 46rem; }
   .home-copy h1 { font-size: clamp(3.2rem, 7vw, 4.8rem); }
-  .property-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 1000px) {
@@ -1235,6 +1206,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
     padding: .6rem;
     border: 1px solid var(--line-soft);
     border-radius: var(--r-md);
+    /* Opaque on purpose: a translucent panel is unreadable over the booking iframe. */
     background: var(--sand-50);
     box-shadow: var(--shadow-lg);
   }
@@ -1242,51 +1214,17 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
   .nav-button, .btn-book { width: 100%; min-height: 2.9rem; text-align: left; }
   .language-toggle { min-height: 2.9rem; align-self: flex-start; margin: .35rem .95rem; }
   .btn-book { justify-content: flex-start; margin-top: .3rem; }
+  /* The header is shorter here, so the section minimum height follows it. */
+  .view { min-height: calc(100vh - 7.6rem); }
 }
 
 @media (max-width: 700px) {
-  .app-header { height: 4.6rem; }
-  .nav-shell { width: calc(100% - 2rem); }
-  .menu-toggle {
-    display: grid;
-    width: 2.8rem;
-    height: 2.8rem;
-    place-content: center;
-    gap: .4rem;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    background: rgba(255, 255, 255, .6);
-    box-shadow: var(--shadow-xs);
-  }
-  .menu-toggle > span:not(.sr-only) { display: block; width: 1rem; border-top: 1.5px solid var(--teal-800); }
-  .nav-links {
-    position: absolute;
-    top: 4.15rem;
-    right: 1rem;
-    left: 1rem;
-    display: none;
-    align-items: stretch;
-    flex-direction: column;
-    gap: .15rem;
-    padding: .6rem;
-    border: 1px solid var(--line-soft);
-    border-radius: var(--r-md);
-    /* Opaque on purpose: a translucent panel is unreadable over the booking iframe. */
-    background: var(--sand-50);
-    box-shadow: var(--shadow-lg);
-  }
-  .nav-links.open { display: flex; animation: rise .3s var(--ease) both; }
-  .nav-button, .btn-book { width: 100%; min-height: 2.9rem; text-align: left; }
-  .btn-book { justify-content: flex-start; margin-top: .3rem; }
-  .view { min-height: calc(100vh - 7.6rem); }
   .home-photo { aspect-ratio: 4 / 3; }
-  .photo-credit { display: none; }
   .home-content { gap: 2rem; margin-top: -1.75rem; padding: 2.25rem 1.15rem 2rem; }
   .home-copy h1 { font-size: clamp(2.15rem, 10.4vw, 3.2rem); letter-spacing: -.045em; line-height: .98; }
   .home-actions { align-items: stretch; flex-direction: column; margin-top: 1.6rem; }
-  .property-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+  .property-facts { gap: .6rem; }
   .property-facts > a { padding: .9rem .85rem .95rem; }
-  .property-facts span { width: 1.5rem; height: 1.5rem; margin-bottom: .55rem; }
   .property-facts strong { font-size: .92rem; }
   .property-facts small { font-size: .68rem; }
   .local-experiences { padding: 3.25rem 1.15rem; }
@@ -1294,8 +1232,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
   .experience-card { min-height: min(118vw, 30rem); }
   .experience-card-scuba img { object-position: 62% center; }
   .villa-details { display: block; padding: 2.75rem 1.15rem; }
-  .villa-details-intro h2 { font-size: clamp(2.8rem, 13vw, 4rem); }
-  .villa-details-intro h2 { white-space: normal; }
+  .villa-details-intro h2 { font-size: clamp(2.8rem, 13vw, 4rem); white-space: normal; }
   .villa-detail-grid { grid-template-columns: 1fr; margin-top: 2rem; }
   .villa-detail-grid > a { padding: 1.35rem 1.15rem; }
   .villa-detail-strip { margin-top: 1.75rem; gap: .5rem; }
@@ -1305,7 +1242,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
   .gallery-heading h2 { margin-bottom: 1rem; }
   .gallery-lead { font-size: .8rem; }
   .gallery-filters { display: none; }
-  .gallery-filter-mobile { display: grid; gap: .4rem; margin-bottom: 1rem; }
+  .gallery-filter-mobile { display: grid; gap: .4rem; margin: .75rem 0 1rem; }
   .gallery-filter-mobile label { color: var(--muted); font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
   .gallery-filter-mobile select {
     width: 100%;
@@ -1318,7 +1255,8 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
       var(--white);
     box-shadow: var(--shadow-xs);
     color: var(--teal-800);
-    font: 700 .86rem var(--sans);
+    /* 16px: iOS Safari zooms the page into any form control set smaller. */
+    font: 700 1rem var(--sans);
     -webkit-appearance: none;
     appearance: none;
   }
@@ -1369,7 +1307,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
   .amenity-links a { grid-template-columns: auto minmax(0, 1fr); gap: .8rem; min-height: 4.6rem; }
   .amenity-links em { grid-column: 2; text-align: left; }
   .amenity-links a.is-active { transform: none; }
-  .calendar-frame { height: var(--cal-frame-h, min(78svh, 44rem)); }
+  .calendar-frame { height: var(--cal-frame-h, min(78vh, 44rem)); height: var(--cal-frame-h, min(78svh, 44rem)); }
   .app-footer { grid-template-columns: 1fr; align-items: flex-start; gap: .8rem; }
   .lightbox { padding: 4.5rem .75rem 5rem; }
   .lightbox figure { width: 100%; }
@@ -1380,11 +1318,11 @@ h1, h2 { font-family: var(--serif); font-weight: 500; letter-spacing: -.035em; t
   .lightbox-tools small { display: none; }
 }
 
+/* Entrance animations end in the normal state, so simply not running them is
+   correct; shortening them instead left elements invisible for their delay. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    scroll-behavior: auto !important;
     transition-duration: .01ms !important;
-    animation-duration: .01ms !important;
-    animation-iteration-count: 1 !important;
+    animation: none !important;
   }
 }
